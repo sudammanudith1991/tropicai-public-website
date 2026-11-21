@@ -28,7 +28,7 @@ export const PRODUCTS = [
   },
   {
     id: 'kithul-flour', name: 'Kithul Flour', sinhala: 'කිතුල් පිටි', variants: [{ label: '500g', price: 1000 }, { label: '250g', price: 550 }],
-    category: 'kithul', origin: 'Lakshapana', image: null,
+    category: 'kithul', origin: 'Lakshapana', image: m('kithul-flour.jpg'), focus: '55% 50%',
     blurb: 'Starch drawn from the pith of the kithul palm and sun dried. Use it for kithul thalapa, porridge and traditional sweets.',
     tags: ['Traditional', 'Sun dried'],
   },
@@ -157,4 +157,12 @@ export const BENEFITS = {
       b('Porridge', ['Drizzled into traditional grain or herbal porridges for flavour and a quick energy boost.']),
     ],
   },
+}
+
+// Back labels shown in the product popup. Keyed by product id.
+export const LABELS = {
+  'water-lily-rice': m('labels/olu-haal.jpg'),
+  'meneri-rice': m('labels/meneri.jpg'),
+  'bael-flower': m('labels/beli-mal.jpg'),
+  'kithul-flour': m('labels/kithul-flour.jpg'),
 }

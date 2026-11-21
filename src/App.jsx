@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, fmt, fmtPrice } from './data.js'
+import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, fmt, fmtPrice } from './data.js'
 
 const CART_KEY = 'tropicai_cart_v2'
 const keyOf = (id, vi) => `${id}::${vi}`
@@ -288,10 +288,11 @@ function Modal({ p, onClose, onAdd, qty }) {
   useEffect(() => { setVi(0); setZoom(null) }, [p])
   if (!p) return null
   const ben = BENEFITS[p.id]
+  const label = LABELS[p.id]
   const v = p.variants[vi] || p.variants[0]
   return (
     <div className="overlay" onClick={onClose}>
-      <div className={ben ? 'modal wide' : 'modal'} onClick={(e) => e.stopPropagation()}>
+      <div className={ben || label ? 'modal wide' : 'modal'} onClick={(e) => e.stopPropagation()}>
         <button className="x" onClick={onClose} aria-label="Close">×</button>
         <ProductImage p={p} className="modal-img" />
         <div className="modal-body">
@@ -305,6 +306,19 @@ function Modal({ p, onClose, onAdd, qty }) {
             <button className="btn primary" onClick={() => onAdd(p.id, vi)}>{v.price == null ? 'Ask about this' : qty ? `Add another (${qty})` : 'Add to cart'}</button>
           </div>
           {ben && <Benefits data={ben} onZoom={setZoom} />}
+          {label && (
+            <section className="label-wrap">
+              <button className="label-thumb" onClick={() => setZoom(label)} aria-label="Enlarge back label">
+                <img src={label} alt={`${p.name} back label`} loading="lazy" />
+              </button>
+              <div>
+                <p className="eyebrow">Back label</p>
+                <h4>What's on the pack</h4>
+                <p>The story, how it's made and how to prepare it, exactly as printed on the back of every {p.name} pack.</p>
+                <button className="btn small ghost" onClick={() => setZoom(label)}>View full label</button>
+              </div>
+            </section>
+          )}
         </div>
       </div>
       {zoom && (
