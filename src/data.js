@@ -81,7 +81,48 @@ export const MORE_PRODUCTS = [
   { id: 'peanut-cups', name: 'Flavoured Peanut Cups', sinhala: 'රට කජු කෝප්ප', category: 'nuts', origin: 'Made by Tropicai' },
 ].map((p) => ({ ...p, variants: [{ label: null, price: null }] }))
 
-export const ALL_ITEMS = [...PRODUCTS, ...MORE_PRODUCTS]
+// Fizzy Corner: naturally sparkling ginger bug sodas.
+// Prices not set yet (null shows "Price on request").
+const f = (x) => `./media/fizzy/${x}`
+export const DRINKS = [
+  {
+    id: 'soda-pineapple', name: 'Pineapple Soda', short: 'Pineapple', accent: '#f6a21e',
+    variants: [{ label: '375ml', price: null }, { label: '200ml', price: null }],
+    image: f('bottle-pineapple.jpg'), fruit: f('fruit-pineapple.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
+    blurb: 'Ripe pineapple and fresh ginger, slowly fermented into a bright, tangy sparkle. Tropical sunshine in a bottle.',
+    tags: ['Naturally sparkling', 'Sweetened with bee honey'],
+  },
+  {
+    id: 'soda-mango', name: 'Mango Soda', short: 'Mango', accent: '#f2862a',
+    variants: [{ label: '375ml', price: null }],
+    image: f('bottle-mango.jpg'), fruit: f('fruit-mango.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
+    blurb: 'Juicy ripe mango meets a gentle ginger fizz. Smooth, golden and lightly tangy.',
+    tags: ['Naturally sparkling', 'Sweetened with bee honey'],
+  },
+  {
+    id: 'soda-pomegranate', name: 'Pomegranate Soda', short: 'Pomegranate', accent: '#e8336f',
+    variants: [{ label: '200ml', price: null }],
+    image: f('bottle-pomegranate.jpg'), fruit: f('fruit-pomegranate.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
+    blurb: 'Ruby pomegranate with a crisp ginger finish. Tart, elegant and beautifully pink.',
+    tags: ['Naturally sparkling', 'Sweetened with bee honey'],
+  },
+  {
+    id: 'soda-sweet-orange', name: 'Sweet Orange Soda', short: 'Sweet Orange', accent: '#f4b632',
+    variants: [{ label: '375ml', price: null }],
+    image: f('bottle-sweet-orange.jpg'), fruit: f('fruit-sweet-orange.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
+    blurb: 'Green skinned Sri Lankan sweet orange, zesty and refreshing, with a lively ginger kick.',
+    tags: ['Naturally sparkling', 'Sweetened with bee honey'],
+  },
+  {
+    id: 'soda-watermelon', name: 'Watermelon Soda', short: 'Watermelon', accent: '#f0608f',
+    variants: [{ label: '375ml', price: null }],
+    image: f('bottle-watermelon.jpg'), fruit: f('fruit-watermelon.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
+    blurb: 'Fresh watermelon, light and thirst quenching, with a soft natural fizz. A hot day essential.',
+    tags: ['Naturally sparkling', 'Sweetened with bee honey'],
+  },
+]
+
+export const ALL_ITEMS = [...PRODUCTS, ...MORE_PRODUCTS, ...DRINKS]
 
 export const fmt = (n) => 'Rs ' + n.toLocaleString('en-LK')
 export const fmtPrice = (n) => (n == null ? 'Price on request' : fmt(n))

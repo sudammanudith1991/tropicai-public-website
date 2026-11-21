@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, fmt, fmtPrice } from './data.js'
+import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, fmt, fmtPrice } from './data.js'
 
 const CART_KEY = 'tropicai_cart_v2'
 const keyOf = (id, vi) => `${id}::${vi}`
@@ -44,6 +44,7 @@ function Header({ count, onCart }) {
       </a>
       <nav className="nav">
         <a href="#shop">Shop</a>
+        <a href="#fizzy" className="nav-fizzy">Fizzy Corner</a>
         <a href="#story">Our Story</a>
         <a href="#process">Process</a>
         <a href="#contact">Contact</a>
@@ -71,6 +72,16 @@ function Hero() {
           <a href="#shop" className="btn primary">Shop the harvest</a>
           <a href="#process" className="btn ghost">Watch how it's made</a>
         </div>
+        <a href="#fizzy" className="fizzy-promo">
+          <Droplets count={14} seed={7} />
+          <img src="./media/fizzy/bottle-mango.jpg" alt="" />
+          <span className="fp-text">
+            <small>New · The Fizzy Corner</small>
+            <strong>Naturally sparkling ginger bug sodas</strong>
+            <em>No sugar added · Sweetened with bee honey</em>
+          </span>
+          <span className="fp-arrow">→</span>
+        </a>
         <ul className="trust">
           <li><strong>100%</strong> natural</li>
           <li><strong>2</strong> sourcing regions</li>
@@ -152,6 +163,100 @@ function Shop({ cart, add, open }) {
           </div>
         </div>
       )}
+    </section>
+  )
+}
+
+function rand(seed) {
+  let x = seed
+  return () => { x = (x * 9301 + 49297) % 233280; return x / 233280 }
+}
+
+function Droplets({ count = 40, seed = 1 }) {
+  const drops = useMemo(() => {
+    const r = rand(seed)
+    return Array.from({ length: count }, () => {
+      const size = 3 + Math.pow(r(), 3) * 24
+      return { left: r() * 100, top: r() * 100, size, stretch: 1 + r() * 0.35, o: 0.45 + r() * 0.5 }
+    })
+  }, [count, seed])
+  return (
+    <div className="droplets" aria-hidden="true">
+      {drops.map((d, i) => (
+        <span key={i} style={{ left: `${d.left}%`, top: `${d.top}%`, width: d.size, height: d.size * d.stretch, opacity: d.o }} />
+      ))}
+    </div>
+  )
+}
+
+function Bubbles({ count = 26 }) {
+  const items = useMemo(() => {
+    const r = rand(42)
+    return Array.from({ length: count }, () => ({ left: r() * 100, size: 3 + r() * 9, dur: 7 + r() * 10, delay: -r() * 17 }))
+  }, [count])
+  return (
+    <div className="bubbles" aria-hidden="true">
+      {items.map((b, i) => (
+        <span key={i} style={{ left: `${b.left}%`, width: b.size, height: b.size, animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />
+      ))}
+    </div>
+  )
+}
+
+function FizzyCard({ p, qty, onAdd, onOpen }) {
+  const [vi, setVi] = useState(0)
+  const v = p.variants[vi]
+  return (
+    <article className="fz-card" style={{ '--accent': p.accent }}>
+      <button className="fz-img" onClick={() => onOpen(p)} aria-label={`View ${p.name}`}>
+        <img className="fz-fruit" src={p.fruit} alt={p.short} loading="lazy" />
+        <img className="fz-bottle" src={p.image} alt={`Tropicai ${p.name} bottle`} loading="lazy" />
+      </button>
+      <div className="fz-body">
+        <p className="fz-kicker">Ginger bug soda</p>
+        <h3>{p.short}</h3>
+        <SizePicker p={p} vi={vi} setVi={setVi} />
+        <p className="fz-blurb">{p.blurb}</p>
+        <div className="card-foot">
+          <span className={v.price == null ? 'price req' : 'price'}>{fmtPrice(v.price)}</span>
+          <button className="btn small fz-btn" onClick={() => onAdd(p.id, vi)}>
+            {v.price == null ? (qty ? `Asked (${qty}) +` : 'Ask +') : qty ? `Added (${qty}) +` : 'Add to cart'}
+          </button>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function FizzyCorner({ cart, add, open }) {
+  return (
+    <section className="fizzy" id="fizzy">
+      <Droplets count={160} seed={3} />
+      <Bubbles />
+      <div className="fizzy-inner">
+        <div className="fizzy-head">
+          <p className="fz-eyebrow">✦ The Fizzy Corner ✦</p>
+          <h2>Naturally sparkling<br /><em>ginger bug sodas</em></h2>
+          <p className="fizzy-lead">
+            Real fruit and fresh ginger, fermented the old way with a living ginger bug culture.
+            The fizz comes from the fermentation itself: no carbonation machines, no artificial flavours, no colours.
+          </p>
+          <ul className="fz-badges">
+            <li>No sugar added</li>
+            <li>Sweetened with bee honey</li>
+            <li>Only natural ingredients</li>
+            <li>Naturally fermented fizz</li>
+          </ul>
+        </div>
+        <div className="fz-grid">
+          {DRINKS.map((p) => <FizzyCard key={p.id} p={p} qty={qtyOf(cart, p.id)} onAdd={add} onOpen={open} />)}
+        </div>
+        <div className="fz-process">
+          <div><b>01</b><h4>The ginger bug</h4><p>Fresh grated ginger is fed and left to ferment until it becomes a lively, bubbling starter culture.</p></div>
+          <div><b>02</b><h4>Real fruit</h4><p>Pineapple, mango, pomegranate, sweet orange and watermelon, pressed fresh and sweetened only with bee honey.</p></div>
+          <div><b>03</b><h4>Natural fizz</h4><p>The bug ferments the fruit in the bottle, creating its own gentle sparkle. Best served chilled.</p></div>
+        </div>
+      </div>
     </section>
   )
 }
@@ -292,7 +397,7 @@ function Modal({ p, onClose, onAdd, qty }) {
   const v = p.variants[vi] || p.variants[0]
   return (
     <div className="overlay" onClick={onClose}>
-      <div className={ben || label ? 'modal wide' : 'modal'} onClick={(e) => e.stopPropagation()}>
+      <div className={`${ben || label ? 'modal wide' : 'modal'}${p.category === 'fizzy' ? ' fz-modal' : ''}`} onClick={(e) => e.stopPropagation()}>
         <button className="x" onClick={onClose} aria-label="Close">×</button>
         <ProductImage p={p} className="modal-img" />
         <div className="modal-body">
@@ -338,7 +443,7 @@ function buildMessage(lines, subtotal, hasRequest, form) {
     const price = l.v.price != null ? ` = ${fmt(l.v.price * l.qty)}` : ' = price on request'
     out.push(`${i + 1}. ${l.item.name}${size} x ${l.qty}${price}`)
   })
-  out.push('', `Subtotal: ${fmt(subtotal)}${hasRequest ? ' + items on request' : ''}`)
+  out.push('', subtotal === 0 && hasRequest ? 'Subtotal: prices on request' : `Subtotal: ${fmt(subtotal)}${hasRequest ? ' + items on request' : ''}`)
   out.push('', `Name: ${form.name || ''}`)
   if (form.phone) out.push(`Phone: ${form.phone}`)
   out.push(`Delivery: ${form.method === 'pickup' ? 'Pick up at stall' : 'Home delivery'}`)
@@ -404,7 +509,7 @@ function CartDrawer({ open, onClose, cart, setQty, clear }) {
             </ul>
             <div className="sub">
               <span>Subtotal</span>
-              <strong>{fmt(subtotal)}{hasRequest && <small> + items on request</small>}</strong>
+              <strong>{subtotal === 0 && hasRequest ? <small>Prices on request</small> : <>{fmt(subtotal)}{hasRequest && <small> + items on request</small>}</>}</strong>
             </div>
             <p className="note">Delivery charges are confirmed on WhatsApp.</p>
 
@@ -474,11 +579,12 @@ export default function App() {
 
   return (
     <>
-      <div className="announce">Fresh harvest from Lakshapana and Thanamalwila · Order on WhatsApp {WHATSAPP_DISPLAY}</div>
+      <div className="announce">Fresh harvest from Lakshapana and Thanamalwila · <a href="#fizzy">New: Fizzy Corner sodas</a> · Order on WhatsApp {WHATSAPP_DISPLAY}</div>
       <Header count={count} onCart={() => setCartOpen(true)} />
       <main>
         <Hero />
         <Shop cart={cart} add={add} open={setModal} />
+        <FizzyCorner cart={cart} add={add} open={setModal} />
         <Story />
         <Process />
         <Gallery />
