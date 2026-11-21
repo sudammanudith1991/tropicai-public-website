@@ -1,7 +1,26 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, fmt } from './data.js'
+import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, fmt, fmtPrice } from './data.js'
 
-const CART_KEY = 'tropicai_cart_v1'
+const CART_KEY = 'tropicai_cart_v2'
+const keyOf = (id, vi) => `${id}::${vi}`
+const parseKey = (k) => { const [id, vi] = k.split('::'); return { id, vi: Number(vi) || 0 } }
+const qtyOf = (cart, id) => Object.entries(cart).reduce((s, [k, q]) => (parseKey(k).id === id ? s + q : s), 0)
+
+function ProductImage({ p, className }) {
+  if (!p.image) return <div className={`img-ph ${className || ''}`}><Logo size={72} /><span>{p.name}</span></div>
+  return <img className={className} src={p.image} alt={`Tropicai ${p.name}`} style={{ objectPosition: p.focus || 'center' }} loading="lazy" />
+}
+
+function SizePicker({ p, vi, setVi }) {
+  if (p.variants.length < 2) return <p className="size">{p.variants[0].label || '\u00a0'}</p>
+  return (
+    <div className="sizes">
+      {p.variants.map((v, i) => (
+        <button key={i} className={i === vi ? 'size-pill on' : 'size-pill'} onClick={() => setVi(i)}>{v.label}</button>
+      ))}
+    </div>
+  )
+}
 const loadCart = () => {
   try { return JSON.parse(localStorage.getItem(CART_KEY)) || {} } catch { return {} }
 }
@@ -85,10 +104,12 @@ function Hero() {
 }
 
 function ProductCard({ p, qty, onAdd, onOpen }) {
+  const [vi, setVi] = useState(0)
+  const v = p.variants[vi]
   return (
     <article className="card">
       <button className="card-img" onClick={() => onOpen(p)} aria-label={`View ${p.name}`}>
-        <img src={p.image} alt={`Tropicai ${p.name}`} style={{ objectPosition: p.focus || 'center' }} loading="lazy" />
+        <ProductImage p={p} />
         <span className="origin-pill">{p.origin}</span>
       </button>
       <div className="card-body">
@@ -96,12 +117,12 @@ function ProductCard({ p, qty, onAdd, onOpen }) {
           <h3>{p.name}</h3>
           <span className="si">{p.sinhala}</span>
         </div>
-        <p className="size">{p.size}</p>
+        <SizePicker p={p} vi={vi} setVi={setVi} />
         <p className="blurb">{p.blurb}</p>
         <div className="card-foot">
-          <span className="price">{fmt(p.price)}</span>
-          <button className="btn small primary" onClick={() => onAdd(p.id)}>
-            {qty ? `Added (${qty}) +` : 'Add to cart'}
+          <span className={v.price == null ? 'price req' : 'price'}>{fmtPrice(v.price)}</span>
+          <button className="btn small primary" onClick={() => onAdd(p.id, vi)}>
+            {v.price == null ? (qty ? `Asked (${qty}) +` : 'Ask +') : qty ? `Added (${qty}) +` : 'Add to cart'}
           </button>
         </div>
       </div>
@@ -126,7 +147,7 @@ function Shop({ cart, add, open }) {
         ))}
       </div>
       <div className="grid">
-        {list.map((p) => <ProductCard key={p.id} p={p} qty={cart[p.id]} onAdd={add} onOpen={open} />)}
+        {list.map((p) => <ProductCard key={p.id} p={p} qty={qtyOf(cart, p.id)} onAdd={add} onOpen={open} />)}
       </div>
       {more.length > 0 && (
         <div className="more">
@@ -134,13 +155,13 @@ function Shop({ cart, add, open }) {
           <p>Seasonal and limited items. Add them to your order and we'll confirm price and availability on WhatsApp.</p>
           <div className="more-list">
             {more.map((p) => (
-              <button key={p.id} className={cart[p.id] ? 'more-item on' : 'more-item'} onClick={() => add(p.id)}>
+              <button key={p.id} className={qtyOf(cart, p.id) ? 'more-item on' : 'more-item'} onClick={() => add(p.id, 0)}>
                 <Logo size={22} />
                 <span>
                   <strong>{p.name}</strong>
                   <small>{p.sinhala} · {p.origin}</small>
                 </span>
-                <em>{cart[p.id] ? `In cart (${cart[p.id]})` : 'Ask +'}</em>
+                <em>{qtyOf(cart, p.id) ? `In cart (${qtyOf(cart, p.id)})` : 'Ask +'}</em>
               </button>
             ))}
           </div>
@@ -244,21 +265,24 @@ function Contact() {
 }
 
 function Modal({ p, onClose, onAdd, qty }) {
+  const [vi, setVi] = useState(0)
+  useEffect(() => setVi(0), [p])
   if (!p) return null
+  const v = p.variants[vi] || p.variants[0]
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <button className="x" onClick={onClose} aria-label="Close">×</button>
-        <img src={p.image} alt={`Tropicai ${p.name}`} style={{ objectPosition: p.focus || 'center' }} />
+        <ProductImage p={p} className="modal-img" />
         <div className="modal-body">
           <p className="eyebrow">{p.origin}</p>
           <h3>{p.name} <span className="si">{p.sinhala}</span></h3>
-          <p className="size">{p.size}</p>
+          <SizePicker p={p} vi={vi} setVi={setVi} />
           <p>{p.blurb}</p>
           <div className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</div>
           <div className="card-foot">
-            <span className="price">{fmt(p.price)}</span>
-            <button className="btn primary" onClick={() => onAdd(p.id)}>{qty ? `Add another (${qty})` : 'Add to cart'}</button>
+            <span className={v.price == null ? 'price req' : 'price'}>{fmtPrice(v.price)}</span>
+            <button className="btn primary" onClick={() => onAdd(p.id, vi)}>{v.price == null ? 'Ask about this' : qty ? `Add another (${qty})` : 'Add to cart'}</button>
           </div>
         </div>
       </div>
@@ -269,8 +293,8 @@ function Modal({ p, onClose, onAdd, qty }) {
 function buildMessage(lines, subtotal, hasRequest, form) {
   const out = ["Hello Tropicai! I'd like to place an order:", '']
   lines.forEach((l, i) => {
-    const size = l.item.size ? ` (${l.item.size})` : ''
-    const price = l.item.price != null ? ` = ${fmt(l.item.price * l.qty)}` : ' = price on request'
+    const size = l.v.label ? ` (${l.v.label})` : ''
+    const price = l.v.price != null ? ` = ${fmt(l.v.price * l.qty)}` : ' = price on request'
     out.push(`${i + 1}. ${l.item.name}${size} x ${l.qty}${price}`)
   })
   out.push('', `Subtotal: ${fmt(subtotal)}${hasRequest ? ' + items on request' : ''}`)
@@ -286,10 +310,14 @@ function buildMessage(lines, subtotal, hasRequest, form) {
 function CartDrawer({ open, onClose, cart, setQty, clear }) {
   const [form, setForm] = useState({ name: '', phone: '', method: 'delivery', address: '', notes: '' })
   const lines = Object.entries(cart)
-    .map(([id, qty]) => ({ item: ALL_ITEMS.find((p) => p.id === id), qty }))
-    .filter((l) => l.item && l.qty > 0)
-  const subtotal = lines.reduce((s, l) => s + (l.item.price || 0) * l.qty, 0)
-  const hasRequest = lines.some((l) => l.item.price == null)
+    .map(([key, qty]) => {
+      const { id, vi } = parseKey(key)
+      const item = ALL_ITEMS.find((p) => p.id === id)
+      return { key, item, v: item && item.variants[vi], qty }
+    })
+    .filter((l) => l.item && l.v && l.qty > 0)
+  const subtotal = lines.reduce((s, l) => s + (l.v.price || 0) * l.qty, 0)
+  const hasRequest = lines.some((l) => l.v.price == null)
   const message = buildMessage(lines, subtotal, hasRequest, form)
   const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
   const ready = lines.length > 0 && form.name.trim() && (form.method === 'pickup' || form.address.trim())
@@ -316,20 +344,20 @@ function CartDrawer({ open, onClose, cart, setQty, clear }) {
         ) : (
           <div className="drawer-body">
             <ul className="lines">
-              {lines.map(({ item, qty }) => (
-                <li key={item.id}>
+              {lines.map(({ key, item, v, qty }) => (
+                <li key={key}>
                   {item.image ? <img src={item.image} alt="" style={{ objectPosition: item.focus || 'center' }} /> : <span className="ph"><Logo size={28} /></span>}
                   <div className="line-info">
                     <strong>{item.name}</strong>
-                    <small>{item.size || 'Price on request'}</small>
+                    <small>{v.label || 'Size and price on request'}</small>
                     <div className="qty">
-                      <button onClick={() => setQty(item.id, qty - 1)} aria-label="Decrease">−</button>
+                      <button onClick={() => setQty(key, qty - 1)} aria-label="Decrease">−</button>
                       <span>{qty}</span>
-                      <button onClick={() => setQty(item.id, qty + 1)} aria-label="Increase">+</button>
-                      <button className="rm" onClick={() => setQty(item.id, 0)}>Remove</button>
+                      <button onClick={() => setQty(key, qty + 1)} aria-label="Increase">+</button>
+                      <button className="rm" onClick={() => setQty(key, 0)}>Remove</button>
                     </div>
                   </div>
-                  <span className="line-price">{item.price != null ? fmt(item.price * qty) : 'On request'}</span>
+                  <span className="line-price">{v.price != null ? fmt(v.price * qty) : 'On request'}</span>
                 </li>
               ))}
             </ul>
@@ -389,10 +417,12 @@ export default function App() {
   }, [cartOpen, modal])
 
   const count = useMemo(() => Object.values(cart).reduce((a, b) => a + b, 0), [cart])
-  const add = (id) => {
-    setCart((c) => ({ ...c, [id]: (c[id] || 0) + 1 }))
+  const add = (id, vi = 0) => {
+    const k = keyOf(id, vi)
+    setCart((c) => ({ ...c, [k]: (c[k] || 0) + 1 }))
     const item = ALL_ITEMS.find((p) => p.id === id)
-    setToast(`${item.name} added to cart`)
+    const label = item.variants[vi] && item.variants[vi].label
+    setToast(`${item.name}${label ? ` (${label})` : ''} added to cart`)
     clearTimeout(window.__t); window.__t = setTimeout(() => setToast(''), 1800)
   }
   const setQty = (id, q) => setCart((c) => {
@@ -413,7 +443,7 @@ export default function App() {
         <Gallery />
       </main>
       <Contact />
-      <Modal p={modal} qty={modal && cart[modal.id]} onClose={() => setModal(null)} onAdd={add} />
+      <Modal p={modal} qty={modal && qtyOf(cart, modal.id)} onClose={() => setModal(null)} onAdd={add} />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} cart={cart} setQty={setQty} clear={() => setCart({})} />
       {count > 0 && !cartOpen && (
         <button className="fab" onClick={() => setCartOpen(true)}>
