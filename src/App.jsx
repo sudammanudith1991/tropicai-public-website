@@ -26,24 +26,7 @@ const loadCart = () => {
 }
 
 function Logo({ size = 40 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-      <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" strokeWidth="2" />
-      <g stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none">
-        <path d="M20 50 L44 14" />
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => {
-          const t = 0.15 + i * 0.11
-          const x = 20 + 24 * t, y = 50 - 36 * t, l = 13 - i * 1.2
-          return (
-            <g key={i}>
-              <path d={`M${x} ${y} q ${-l * 0.6} ${-l * 0.1} ${-l} ${-l * 0.7}`} />
-              <path d={`M${x} ${y} q ${l * 0.35} ${l * 0.35} ${l} ${l * 0.3}`} />
-            </g>
-          )
-        })}
-      </g>
-    </svg>
-  )
+  return <img src="./media/logo-mark.png" width={size} height={size} alt="" aria-hidden="true" style={{ objectFit: 'contain' }} />
 }
 
 const WaIcon = () => (
@@ -56,8 +39,8 @@ function Header({ count, onCart }) {
   return (
     <header className="header">
       <a href="#top" className="brand">
-        <Logo size={38} />
-        <span className="wordmark">TROPICAI</span>
+        <Logo size={42} />
+        <img className="wordmark-img" src="./media/logo-wordmark.png" alt="Tropicai" />
       </a>
       <nav className="nav">
         <a href="#shop">Shop</a>
@@ -239,11 +222,7 @@ function Contact() {
   return (
     <footer className="footer" id="contact">
       <div className="footer-brand">
-        <Logo size={56} />
-        <div>
-          <p className="wordmark big">TROPICAI</p>
-          <p className="tag">Nature's purest, delivered to your doorstep.</p>
-        </div>
+        <img className="footer-logo" src="./media/logo-full.png" alt="Tropicai. Nature's purest, delivered to your doorstep." />
       </div>
       <div className="footer-cols">
         <div>
