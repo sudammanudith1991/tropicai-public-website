@@ -41,7 +41,7 @@ export const PRODUCTS = [
   {
     id: 'meneri-rice', name: 'Meneri Rice', sinhala: 'මෙනේරි', variants: [{ label: '1kg', price: 2350 }, { label: '500g', price: 1350 }, { label: '250g', price: 750 }],
     category: 'grains', origin: 'Thanamalwila', image: m('meneri-rice.jpg'),
-    blurb: 'Foxtail millet grown in the dry zone. Light, fluffy and naturally gluten free. Cook it like rice or as a warm porridge.',
+    blurb: 'Little millet grown in the dry zone. Light, fluffy and naturally gluten free. Cook it like rice or as a warm porridge.',
     tags: ['Gluten free', 'Dry zone millet'],
   },
   {
@@ -85,3 +85,76 @@ export const ALL_ITEMS = [...PRODUCTS, ...MORE_PRODUCTS]
 
 export const fmt = (n) => 'Rs ' + n.toLocaleString('en-LK')
 export const fmtPrice = (n) => (n == null ? 'Price on request' : fmt(n))
+
+// Health benefits shown in the product popup. Keyed by product id.
+const b = (title, points) => ({ title, points })
+export const BENEFITS = {
+  'meneri-rice': {
+    subtitle: 'Little millet, a traditional Sri Lankan superfood',
+    infographic: m('benefits/meneri.jpg'),
+    items: [
+      b('Blood sugar management', ['Low glycemic index', 'Helps prevent blood sugar spikes', 'Ideal for diabetics']),
+      b('Rich in minerals and vitamins', ['High in iron (combats anaemia)', 'Packed with essential nutrients']),
+      b('Digestive wellness', ['High dietary fibre', 'Promotes regular bowel movements', 'Prevents constipation']),
+      b('Heart health', ["Lowers LDL 'bad' cholesterol", 'Reduces arterial inflammation', 'Supports cardiovascular function']),
+      b('Weight management', ['High fibre and protein content', 'Increases satiety (feeling full)', 'Curbs overeating']),
+      b('Gluten free', ['Naturally gluten free', 'Safe for coeliac and gluten sensitivity']),
+      b('Antioxidant properties', ['Reduces oxidative stress', 'Fights free radicals', 'Boosts overall health']),
+    ],
+  },
+  'bael-flower': {
+    subtitle: 'Bael flower tea, a traditional Sri Lankan herbal infusion',
+    infographic: m('benefits/beli-mal.jpg'),
+    items: [
+      b('Digestive wellness', ['Soothes indigestion', 'Relieves bloating and constipation', 'Supports gut health']),
+      b('Body cooling', ['Reduces internal body heat', 'Alleviates acidity', 'Refreshing tonic for hot weather']),
+      b('Detoxification', ['Purifies blood', 'Supports liver health', 'Helps flush out toxins']),
+      b('Stress relief', ['Promotes relaxation', 'Reduces anxiety', 'Calms the nervous system']),
+      b('Anti inflammatory', ['Reduces inflammation throughout the body', 'Eases joint and muscle pain']),
+      b('Respiratory support', ['Clears airways', 'Supports lung function', 'Traditionally used for catarrh and asthma']),
+    ],
+  },
+  ranawara: {
+    subtitle: 'Cassia auriculata, a traditional Sri Lankan herbal tonic',
+    infographic: m('benefits/ranawara.jpg'),
+    items: [
+      b('Blood sugar management', ['Helps regulate blood glucose levels', 'Supports insulin sensitivity', 'Ideal for diabetes management']),
+      b('Skin health and complexion', ["Known as a 'beauty herb'", 'Improves skin complexion', 'Reduces acne and blemishes', 'Promotes healthy, glowing skin']),
+      b('Urinary and kidney support', ['Supports urinary tract health', 'Acts as a mild diuretic', 'Helps flush out toxins', 'Reduces infection risk']),
+      b('Body cooling', ['Balances internal body heat', 'Relieves excessive thirst', 'Prevents overheating in hot weather']),
+      b('Antioxidant and anti inflammatory', ['Fights oxidative stress', 'Reduces inflammation in the body', 'Protects against chronic ailments', 'Rich in phytochemicals']),
+      b('Digestive wellness', ['Soothes the digestive tract', 'Relieves indigestion and discomfort', 'Promotes healthy gut function']),
+    ],
+  },
+  'water-lily-rice': {
+    subtitle: 'Olu haal, a traditional Sri Lankan superfood',
+    infographic: m('benefits/water-lily.jpg'),
+    items: [
+      b('Blood sugar management', ['Helps regulate blood sugar levels', 'Beneficial for diabetes', 'Low glycemic alternative']),
+      b('Liver health support', ['Traditionally used to support liver function', 'Aids detoxification']),
+      b('Kidney support', ['Promotes kidney function', 'Helps manage kidney stones', 'Traditional remedy']),
+      b('Digestive wellness', ['Improves digestion', 'Stimulates stomach enzymes', 'Easier to digest']),
+      b('Heart and circulatory health', ['Supports heart health', 'Enhances blood circulation', 'Promotes healthy clotting']),
+      b('Nutrient rich profile', ['Rich in plant based protein and fibre', 'Good source of essential minerals such as magnesium and potassium', 'Naturally gluten free']),
+    ],
+  },
+  'kithul-treacle': {
+    subtitle: 'Caryota urens syrup, an authentic Sri Lankan artisanal product',
+    infographic: m('benefits/kithul-treacle.jpg'),
+    items: [
+      b('Low glycemic index', ['Healthier alternative to refined sugar', 'Slow release of energy', 'Prevents sharp blood sugar spikes']),
+      b('Rich in minerals', ['Essential minerals for strong bones, oxygen transport and muscle function']),
+      b('Digestive support', ['Aids digestion', 'Acts as a mild laxative', 'Helps maintain bowel regularity']),
+      b('Energy booster', ['Sustained release of energy', 'Helps combat fatigue and lethargy']),
+      b('Antioxidant properties', ['Contains phenolic compounds that fight oxidative stress and inflammation']),
+      b('Cooling nature', ["Categorised as a 'cooling' food in traditional medicine", 'Balances internal body heat']),
+    ],
+    uses: [
+      b('With curd', ['The most traditional Sri Lankan dessert or breakfast, a perfect flavour combination.']),
+      b('Natural sweetener', ['A direct substitute for refined sugar, honey or maple syrup in tea, coffee and juices.']),
+      b('Baking and desserts', ['Adds deep caramel flavour to cakes, pancakes, waffles and traditional sweets like kavum and watalappan.']),
+      b('Medicinal tonics', ['Taken with herbal preparations to improve palatability and absorption.']),
+      b('Porridge', ['Drizzled into traditional grain or herbal porridges for flavour and a quick energy boost.']),
+    ],
+  },
+}

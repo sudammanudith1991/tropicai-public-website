@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, fmt, fmtPrice } from './data.js'
+import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, fmt, fmtPrice } from './data.js'
 
 const CART_KEY = 'tropicai_cart_v2'
 const keyOf = (id, vi) => `${id}::${vi}`
@@ -94,6 +94,7 @@ function ProductCard({ p, qty, onAdd, onOpen }) {
       <button className="card-img" onClick={() => onOpen(p)} aria-label={`View ${p.name}`}>
         <ProductImage p={p} />
         <span className="origin-pill">{p.origin}</span>
+        {BENEFITS[p.id] && <span className="benefit-pill">Health benefits</span>}
       </button>
       <div className="card-body">
         <div className="card-head">
@@ -102,6 +103,7 @@ function ProductCard({ p, qty, onAdd, onOpen }) {
         </div>
         <SizePicker p={p} vi={vi} setVi={setVi} />
         <p className="blurb">{p.blurb}</p>
+        {BENEFITS[p.id] && <button className="benefit-link" onClick={() => onOpen(p)}>See health benefits →</button>}
         <div className="card-foot">
           <span className={v.price == null ? 'price req' : 'price'}>{fmtPrice(v.price)}</span>
           <button className="btn small primary" onClick={() => onAdd(p.id, vi)}>
@@ -243,14 +245,53 @@ function Contact() {
   )
 }
 
+function BenefitList({ items }) {
+  return (
+    <div className="benefits">
+      {items.map((it, i) => (
+        <div className="benefit" key={it.title}>
+          <span className="benefit-no">{String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h5>{it.title}</h5>
+            <ul>{it.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Benefits({ data, onZoom }) {
+  return (
+    <section className="benefits-wrap">
+      <p className="eyebrow">Health benefits</p>
+      <p className="benefits-sub">{data.subtitle}</p>
+      <BenefitList items={data.items} />
+      {data.uses && (
+        <>
+          <p className="eyebrow" style={{ marginTop: 24 }}>How to enjoy it</p>
+          <BenefitList items={data.uses} />
+        </>
+      )}
+      <button className="infographic" onClick={() => onZoom(data.infographic)} aria-label="Enlarge infographic">
+        <img src={data.infographic} alt="Health benefits infographic" loading="lazy" />
+        <span>Tap to enlarge</span>
+      </button>
+      <p className="disclaimer">Based on traditional Sri Lankan use. Not a substitute for medical advice; consult a health professional for personalised guidance.</p>
+    </section>
+  )
+}
+
 function Modal({ p, onClose, onAdd, qty }) {
   const [vi, setVi] = useState(0)
-  useEffect(() => setVi(0), [p])
+  const [zoom, setZoom] = useState(null)
+  useEffect(() => { setVi(0); setZoom(null) }, [p])
   if (!p) return null
+  const ben = BENEFITS[p.id]
   const v = p.variants[vi] || p.variants[0]
   return (
     <div className="overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className={ben ? 'modal wide' : 'modal'} onClick={(e) => e.stopPropagation()}>
         <button className="x" onClick={onClose} aria-label="Close">×</button>
         <ProductImage p={p} className="modal-img" />
         <div className="modal-body">
@@ -263,8 +304,15 @@ function Modal({ p, onClose, onAdd, qty }) {
             <span className={v.price == null ? 'price req' : 'price'}>{fmtPrice(v.price)}</span>
             <button className="btn primary" onClick={() => onAdd(p.id, vi)}>{v.price == null ? 'Ask about this' : qty ? `Add another (${qty})` : 'Add to cart'}</button>
           </div>
+          {ben && <Benefits data={ben} onZoom={setZoom} />}
         </div>
       </div>
+      {zoom && (
+        <div className="zoom" onClick={(e) => { e.stopPropagation(); setZoom(null) }}>
+          <img src={zoom} alt="Health benefits infographic" />
+          <button className="x" aria-label="Close">×</button>
+        </div>
+      )}
     </div>
   )
 }

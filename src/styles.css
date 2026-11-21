@@ -213,3 +213,33 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
 .footer-brand { justify-content: center; }
 .footer-logo { width: min(320px, 70vw); height: auto; }
 @media (max-width: 560px) { .wordmark-img { height: 21px; } }
+
+/* Health benefits */
+.benefit-pill { position: absolute; right: 12px; top: 12px; background: var(--leaf); color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 11px; border-radius: 999px; letter-spacing: .03em; }
+.benefit-link { align-self: flex-start; background: none; border: 0; padding: 0; margin: -6px 0 16px; color: var(--leaf); font-weight: 700; font-size: 14px; }
+.benefit-link:hover { text-decoration: underline; }
+.modal.wide { max-width: 1080px; grid-template-columns: 0.85fr 1.15fr; }
+.modal.wide .modal-img { position: sticky; top: 0; height: 90vh; }
+.benefits-wrap { margin-top: 28px; padding-top: 24px; border-top: 1px solid rgba(74, 47, 29, .14); }
+.benefits-wrap .eyebrow { margin-bottom: 4px; }
+.benefits-sub { margin: 0 0 16px; font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--brown); }
+.benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.benefit { display: flex; gap: 12px; background: #fffaf2; border: 1px solid rgba(176, 122, 52, .2); border-radius: 14px; padding: 14px; }
+.benefit-no { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--gold); line-height: 1; padding-top: 2px; }
+.benefit h5 { margin: 0 0 6px; font-family: var(--sans); font-size: 14.5px; font-weight: 700; color: var(--brown); }
+.benefit ul { margin: 0; padding-left: 16px; font-size: 13.5px; color: #5d4a3a; line-height: 1.5; }
+.benefit li::marker { color: var(--leaf); }
+.infographic { position: relative; display: block; width: 100%; margin-top: 20px; padding: 0; border: 0; border-radius: 14px; overflow: hidden; background: none; }
+.infographic img { width: 100%; }
+.infographic span { position: absolute; right: 10px; bottom: 10px; background: rgba(43, 29, 19, .8); color: var(--cream); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; }
+.disclaimer { margin: 14px 0 0; font-size: 12.5px; color: var(--muted); font-style: italic; }
+.zoom { position: fixed; inset: 0; z-index: 100; background: rgba(20, 13, 8, .92); display: grid; place-items: center; padding: 16px; cursor: zoom-out; animation: fade .2s; }
+.zoom img { max-width: 100%; max-height: 92vh; border-radius: 10px; }
+.zoom .x { top: 16px; right: 16px; }
+@media (max-width: 900px) {
+  .modal.wide { grid-template-columns: 1fr; }
+  .modal.wide .modal-img { position: static; height: auto; max-height: 300px; }
+  .modal { overflow: auto; }
+  .modal-body { overflow: visible; }
+}
+@media (max-width: 560px) { .benefits { grid-template-columns: 1fr; } .modal-body { padding: 24px 20px; } }
