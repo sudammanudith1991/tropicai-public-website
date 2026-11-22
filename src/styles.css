@@ -653,3 +653,11 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
   .gm-wide { flex-wrap: wrap; }
   .gm-wide .gm-hero-links { width: 100%; padding-left: 82px; }
 }
+/* thinner natural band so it stretches to the video's bottom edge */
+.natural { min-height: 0; margin-top: 20px; padding: 12px 22px; column-gap: 14px; }
+.natural-leaf { font-size: 40px; }
+.natural strong { font-size: clamp(40px, 3.8vw, 56px); }
+.natural em { font-size: clamp(24px, 2.3vw, 32px); }
+.natural p { font-size: 13px; margin-top: 2px; }
+.intro-map { align-self: stretch; display: flex; flex-direction: column; background: #173322; }
+.intro-map video { flex: 1; min-height: 0; height: 100%; }
