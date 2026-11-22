@@ -181,25 +181,23 @@ function Banner() {
 function Intro({ onViewCert }) {
   return (
     <section className="intro">
-      <div className="intro-left">
-          <div className="gm-hero" id="good-market">
-          <img src="./media/good-market-seal.png" alt="Good Market Approved seal" />
-          <div>
-            <strong>Good Market approved</strong>
-            <span>Certified since 25 May 2026 · Good for people, good for the planet</span>
-            <div className="gm-hero-links">
-              <button onClick={onViewCert}>View certificate</button>
-              <a href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">See us on Good Market ↗</a>
-            </div>
-          </div>
+      <div className="gm-hero gm-wide" id="good-market">
+        <img src="./media/good-market-seal.png" alt="Good Market Approved seal" />
+        <div className="gm-wide-text">
+          <strong>Good Market approved</strong>
+          <span>Certified since 25 May 2026 · Good for people, good for the planet</span>
         </div>
+        <div className="gm-hero-links">
+          <button onClick={onViewCert}>View certificate</button>
+          <a href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">See us on Good Market ↗</a>
+        </div>
+      </div>
       <div className="intro-map">
         <video src="./media/sourcing-map.mp4" poster="./media/sourcing-map.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="Map of Sri Lanka showing where Tropicai sources its products" />
         <div className="map-legend">
           <span><b>📍 Lakshapana</b> Kithul treacle, jaggery and flour</span>
           <span><b>📍 Thanamalwila</b> Grains, herbal flowers and peanuts</span>
         </div>
-      </div>
       </div>
       <div className="intro-text">
         <h1>Nature's purest, <em>delivered to your doorstep.</em></h1>
@@ -208,11 +206,14 @@ function Intro({ onViewCert }) {
           <a href="#shop" className="btn primary">Shop the harvest</a>
           <a href="#process" className="btn ghost">Watch how it's made</a>
         </div>
-        <ul className="trust">
-          <li><strong>100%</strong> natural</li>
-          <li><strong>2</strong> sourcing regions</li>
-          <li><strong>Farm</strong> direct</li>
-        </ul>
+        <div className="natural">
+          <span className="natural-leaf" aria-hidden="true">🌿</span>
+          <div>
+            <strong>100%</strong>
+            <em>Natural</em>
+          </div>
+          <p>Straight from Sri Lankan farms to your kitchen.</p>
+        </div>
       </div>
     </section>
   )

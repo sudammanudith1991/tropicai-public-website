@@ -627,3 +627,29 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
 .intro-text h1 { margin-top: 0; }
 .intro-text .trust { margin-bottom: 0; }
 @media (max-width: 900px) { .intro-text { order: -1; } }
+
+/* intro v5 */
+.intro { grid-template-columns: 1.05fr 1fr; align-items: stretch; row-gap: 22px; }
+.gm-wide { grid-column: 1 / -1; max-width: none; margin: 0 !important; display: flex; align-items: center; gap: 18px; padding: 14px 24px 14px 14px; }
+.gm-wide img { width: 64px; height: 64px; }
+.gm-wide-text { flex: 1; }
+.gm-wide-text span { margin-bottom: 0; }
+.gm-wide .gm-hero-links { gap: 20px; }
+.intro-map { align-self: start; }
+.intro-text { justify-content: flex-start; }
+.intro-text h1 { margin: 0; line-height: 1.08; }
+.natural { position: relative; overflow: hidden; flex: 1; margin-top: 26px; min-height: 120px; border-radius: 22px; padding: 18px 26px; display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 18px;
+  background: linear-gradient(120deg, #1f4d22, #3b7a2e 55%, #b07a34); color: #fff; box-shadow: 0 24px 44px -26px rgba(31, 77, 34, .8); }
+.natural::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-20deg); animation: shine 4s ease-in-out infinite; }
+@keyframes shine { 0%, 55% { left: -60% } 100% { left: 130% } }
+@media (prefers-reduced-motion: reduce) { .natural::after { display: none; } }
+.natural-leaf { font-size: 54px; grid-row: span 2; filter: drop-shadow(0 6px 10px rgba(0,0,0,.3)); }
+.natural strong { font-family: var(--serif); font-size: clamp(54px, 5.4vw, 76px); line-height: .9; letter-spacing: -.02em; background: linear-gradient(180deg, #fff, #ffe7b0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.natural em { font-family: var(--serif); font-style: italic; font-size: clamp(30px, 3vw, 42px); margin-left: 10px; color: #ffe7b0; }
+.natural p { margin: 4px 0 0; font-size: 14px; color: #e6f0dd; font-weight: 500; }
+@media (max-width: 900px) {
+  .intro { grid-template-columns: 1fr; }
+  .intro-text { order: 0; }
+  .gm-wide { flex-wrap: wrap; }
+  .gm-wide .gm-hero-links { width: 100%; padding-left: 82px; }
+}
