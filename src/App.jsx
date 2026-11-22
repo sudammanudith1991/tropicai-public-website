@@ -68,6 +68,7 @@ function Header({ count, onCart }) {
       </a>
       <nav className="nav">
         <a href="#shop">Shop</a>
+        <a href="#fizzy">Fizzy Corner</a>
         <a href="#peanuts">Peanuts</a>
         <a href="#hampers">Hampers</a>
         <a href="#story">Our Story</a>
@@ -97,16 +98,6 @@ function Hero() {
           <a href="#shop" className="btn primary">Shop the harvest</a>
           <a href="#process" className="btn ghost">Watch how it's made</a>
         </div>
-        <a href="#fizzy" className="fizzy-promo">
-          <Droplets count={14} seed={7} />
-          <img src="./media/fizzy/bottle-mango.jpg" alt="" />
-          <span className="fp-text">
-            <small>New · The Fizzy Corner</small>
-            <strong>Naturally sparkling ginger bug sodas</strong>
-            <em>No sugar added · Sweetened with bee honey</em>
-          </span>
-          <span className="fp-arrow">→</span>
-        </a>
         <ul className="trust">
           <li><strong>100%</strong> natural</li>
           <li><strong>2</strong> sourcing regions</li>
@@ -385,6 +376,41 @@ function GoodMarket({ onView }) {
           <img src="./media/good-market-certificate.jpg" alt="Tropicai Good Market approval certificate" loading="lazy" />
         </button>
       </div>
+    </section>
+  )
+}
+
+function PromoBands() {
+  return (
+    <section className="bands" aria-label="Explore our ranges">
+      <a href="#fizzy" className="band band-fizzy">
+        <Droplets count={18} seed={7} />
+        <img src="./media/fizzy/bottle-mango.jpg" alt="" />
+        <span className="band-text">
+          <small>New · The Fizzy Corner</small>
+          <strong>Naturally sparkling ginger bug sodas</strong>
+          <em>No sugar added · Sweetened with bee honey</em>
+        </span>
+        <span className="band-arrow">→</span>
+      </a>
+      <a href="#peanuts" className="band band-peanuts">
+        <img src="./media/peanuts/kithul.jpg" alt="" />
+        <span className="band-text">
+          <small>Snack time · Flavoured peanuts</small>
+          <strong>Chocolate, Kithul, Salted & Spicy</strong>
+          <em>50g packs · {fmt(300)} each</em>
+        </span>
+        <span className="band-arrow">→</span>
+      </a>
+      <a href="#hampers" className="band band-hampers">
+        <img src="./media/kithul-treacle.jpg" alt="" />
+        <span className="band-text">
+          <small>Gifting · Coming soon</small>
+          <strong>Create your own hamper</strong>
+          <em>Your favourites, made into a gift</em>
+        </span>
+        <span className="band-arrow">→</span>
+      </a>
     </section>
   )
 }
@@ -742,6 +768,7 @@ export default function App() {
       <Header count={count} onCart={() => setCartOpen(true)} />
       <main>
         <Hero />
+        <PromoBands />
         <Shop cart={cart} add={add} open={openModal} />
         <Peanuts cart={cart} add={add} open={openModal} />
         <FizzyCorner cart={cart} add={add} open={openModal} />
