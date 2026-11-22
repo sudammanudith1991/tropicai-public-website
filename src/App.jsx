@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, PEANUTS, SOCIAL, GOOD_MARKET_URL, fmt, fmtPrice } from './data.js'
+import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, PEANUTS, SOCIAL, GOOD_MARKET_URL, REVIEW_URL, fmt, fmtPrice } from './data.js'
 
 const CART_KEY = 'tropicai_cart_v2'
 const keyOf = (id, vi) => `${id}::${vi}`
@@ -535,6 +535,14 @@ function Story() {
         </div>
       </div>
 
+      <div className="review-band">
+        <div>
+          <strong>Tried Tropicai?</strong>
+          <span>Your review helps other families find honest, farm direct food.</span>
+        </div>
+        <a className="review-btn" href={REVIEW_URL} target="_blank" rel="noopener noreferrer"><span className="stars" aria-hidden="true">★★★★★</span> Leave a Google review</a>
+      </div>
+
       <ul className="values st-values">
         <li>Family and known farmers, no middlemen</li>
         <li>No preservatives, kept as fresh as possible</li>
@@ -600,6 +608,7 @@ function Contact() {
         <div>
           <h4>Follow us</h4>
           <SocialLinks className="social-foot" />
+          <a className="review-btn foot" href={REVIEW_URL} target="_blank" rel="noopener noreferrer"><span className="stars" aria-hidden="true">★★★★★</span> Review us on Google</a>
         </div>
       </div>
       <p className="copy">© {new Date().getFullYear()} Tropicai. Made with care in Sri Lanka.</p>
@@ -817,6 +826,7 @@ function CartDrawer({ open, onClose, cart, setQty, clear }) {
             </a>
             {!ready && <p className="hint">Add your name{form.method === 'delivery' ? ' and address' : ''} to send the order.</p>}
             <p className="hint">Opens WhatsApp to {WHATSAPP_DISPLAY} with your order filled in. Just tap send.</p>
+            <a className="review-link" href={REVIEW_URL} target="_blank" rel="noopener noreferrer">Ordered from us before? <b>Leave a Google review ★</b></a>
             <button className="clear" onClick={clear}>Clear cart</button>
           </div>
         )}

@@ -686,3 +686,14 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
 .st-values { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: center; }
 @media (max-width: 900px) { .st-why { grid-template-columns: 1fr; } .st-photos { padding-right: 30px; } }
 @media (max-width: 560px) { .st-regions { grid-template-columns: 1fr; } .st-text blockquote { font-size: 20px; } }
+
+/* Google review */
+.review-btn .stars, .stars { color: #f5b400 !important; letter-spacing: 1px; font-family: Arial, sans-serif; }
+.review-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px; background: #fff; color: #3c4043; font-weight: 700; font-size: 14.5px; text-decoration: none; box-shadow: 0 8px 22px -12px rgba(0,0,0,.45); border: 1px solid rgba(0,0,0,.08); transition: transform .15s; white-space: nowrap; }
+.review-btn:hover { transform: translateY(-2px); }
+.review-btn.foot { margin-top: 12px; padding: 9px 16px; font-size: 13.5px; }
+.review-band { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin: 0 0 28px; padding: 18px 24px; border-radius: 18px; background: linear-gradient(120deg, #fff7e4, #f3e6cc); border: 1px solid rgba(176, 122, 52, .25); }
+.review-band strong { display: block; font-family: var(--serif); font-size: 24px; color: var(--brown); }
+.review-band span { color: var(--muted); font-size: 14.5px; }
+.review-link { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: var(--muted); text-decoration: none; }
+.review-link b { color: var(--brown); }

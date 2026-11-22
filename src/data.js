@@ -9,6 +9,7 @@ export const SOCIAL = {
   facebook: { url: 'https://www.facebook.com/people/Tropicai-Purely-Sourced/61586343067315/', handle: 'Tropicai Purely Sourced' },
 }
 export const GOOD_MARKET_URL = 'https://www.goodmarket.global/tropicai'
+export const REVIEW_URL = 'https://g.page/r/CZKwlhyC5fwbEAI/review'
 
 const m = (f) => `./media/${f}`
 
