@@ -102,11 +102,18 @@ function ProductCard({ p, qty, onAdd, onOpen }) {
   const v = p.variants[vi]
   return (
     <article className="card">
-      <button className="card-img" onClick={() => onOpen(p)} aria-label={`View ${p.name}`}>
-        <ProductImage p={p} />
+      <div className="card-media">
+        <button className="card-img" onClick={() => onOpen(p)} aria-label={`View ${p.name}`}>
+          <ProductImage p={p} />
+        </button>
         <span className="origin-pill">{p.origin}</span>
-        {BENEFITS[p.id] && <span className="benefit-pill">Health benefits</span>}
-      </button>
+        {(BENEFITS[p.id] || LABELS[p.id]) && (
+          <div className="media-chips">
+            {BENEFITS[p.id] && <button className="chip-link benefits-chip" onClick={() => onOpen(p, 'benefits')}>♥ Health benefits</button>}
+            {LABELS[p.id] && <button className="chip-link origin-chip" onClick={() => onOpen(p, 'origin')}>🌿 Origin & how to enjoy</button>}
+          </div>
+        )}
+      </div>
       <div className="card-body">
         <div className="card-head">
           <h3>{p.name}</h3>
@@ -114,7 +121,7 @@ function ProductCard({ p, qty, onAdd, onOpen }) {
         </div>
         <SizePicker p={p} vi={vi} setVi={setVi} />
         <p className="blurb">{p.blurb}</p>
-        {BENEFITS[p.id] && <button className="benefit-link" onClick={() => onOpen(p)}>See health benefits →</button>}
+        {BENEFITS[p.id] && <button className="benefit-link" onClick={() => onOpen(p, 'benefits')}>See health benefits →</button>}
         <div className="card-foot">
           <span className={v.price == null ? 'price req' : 'price'}>{fmtPrice(v.price)}</span>
           <button className="btn small primary" onClick={() => onAdd(p.id, vi)}>
@@ -387,10 +394,16 @@ function Benefits({ data, onZoom }) {
   )
 }
 
-function Modal({ p, onClose, onAdd, qty }) {
+function Modal({ p, section, onClose, onAdd, qty }) {
   const [vi, setVi] = useState(0)
   const [zoom, setZoom] = useState(null)
   useEffect(() => { setVi(0); setZoom(null) }, [p])
+  useEffect(() => {
+    if (!p || !section) return
+    const id = section === 'benefits' ? 'benefits-anchor' : 'label-anchor'
+    const t = setTimeout(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }), 60)
+    return () => clearTimeout(t)
+  }, [p, section])
   if (!p) return null
   const ben = BENEFITS[p.id]
   const label = LABELS[p.id]
@@ -414,7 +427,7 @@ function Modal({ p, onClose, onAdd, qty }) {
           {(ben || label) && (
             <div className="jump">
               {ben && <a href="#benefits-anchor" onClick={(e) => { e.preventDefault(); document.getElementById('benefits-anchor')?.scrollIntoView({ behavior: 'smooth' }) }}>↓ Health benefits</a>}
-              {label && <a href="#label-anchor" onClick={(e) => { e.preventDefault(); document.getElementById('label-anchor')?.scrollIntoView({ behavior: 'smooth' }) }}>↓ Back label</a>}
+              {label && <a href="#label-anchor" onClick={(e) => { e.preventDefault(); document.getElementById('label-anchor')?.scrollIntoView({ behavior: 'smooth' }) }}>↓ Origin & how to enjoy</a>}
             </div>
           )}
         </div>
@@ -424,14 +437,14 @@ function Modal({ p, onClose, onAdd, qty }) {
           {ben && <div id="benefits-anchor"><Benefits data={ben} onZoom={setZoom} /></div>}
           {label && (
             <section className="label-wrap" id="label-anchor">
-              <button className="label-thumb" onClick={() => setZoom(label)} aria-label="Enlarge back label">
-                <img src={label} alt={`${p.name} back label`} loading="lazy" />
+              <button className="label-thumb" onClick={() => setZoom(label)} aria-label="Enlarge origin and preparation details">
+                <img src={label} alt={`${p.name} origin and preparation`} />
               </button>
               <div>
-                <p className="eyebrow">Back label</p>
-                <h4>What's on the pack</h4>
-                <p>The story, how it's made and how to prepare it, exactly as printed on the back of every {p.name} pack.</p>
-                <button className="btn small ghost" onClick={() => setZoom(label)}>View full label</button>
+                <p className="eyebrow">Origin & how to enjoy</p>
+                <h4>From our farm to your kitchen</h4>
+                <p>Where our {p.name} comes from, how it's made, and the best ways to prepare and enjoy it.</p>
+                <button className="btn small ghost" onClick={() => setZoom(label)}>View full details</button>
               </div>
             </section>
           )}
@@ -570,6 +583,8 @@ export default function App() {
   const [cart, setCart] = useState(loadCart)
   const [cartOpen, setCartOpen] = useState(false)
   const [modal, setModal] = useState(null)
+  const [section, setSection] = useState(null)
+  const openModal = (p, sec = null) => { setSection(sec); setModal(p) }
   const [toast, setToast] = useState('')
 
   useEffect(() => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)) } catch { /* ignore */ } }, [cart])
@@ -598,14 +613,14 @@ export default function App() {
       <Header count={count} onCart={() => setCartOpen(true)} />
       <main>
         <Hero />
-        <Shop cart={cart} add={add} open={setModal} />
-        <FizzyCorner cart={cart} add={add} open={setModal} />
+        <Shop cart={cart} add={add} open={openModal} />
+        <FizzyCorner cart={cart} add={add} open={openModal} />
         <Story />
         <Process />
         <Gallery />
       </main>
       <Contact />
-      <Modal p={modal} qty={modal && qtyOf(cart, modal.id)} onClose={() => setModal(null)} onAdd={add} />
+      <Modal p={modal} section={section} qty={modal && qtyOf(cart, modal.id)} onClose={() => setModal(null)} onAdd={add} />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} cart={cart} setQty={setQty} clear={() => setCart({})} />
       {count > 0 && !cartOpen && (
         <button className="fab" onClick={() => setCartOpen(true)}>

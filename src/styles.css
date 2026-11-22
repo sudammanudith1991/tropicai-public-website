@@ -357,3 +357,15 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
   .zoom-scroll img { width: 1100px; }
 }
 @media (max-width: 560px) { .modal-extra .benefits { grid-template-columns: 1fr; } }
+
+/* Card media chips */
+.card-media { position: relative; }
+.card-media .card-img { width: 100%; display: block; }
+.card-media .origin-pill { pointer-events: none; }
+.benefit-pill { display: none; }
+.media-chips { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-link { border: 0; border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 700; letter-spacing: .01em; backdrop-filter: blur(6px); box-shadow: 0 4px 14px -6px rgba(0,0,0,.45); transition: transform .15s, filter .15s; }
+.chip-link:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.benefits-chip { background: var(--leaf); color: #fff; }
+.origin-chip { background: rgba(247, 241, 230, .94); color: var(--brown); }
+.infographic img { aspect-ratio: 1408 / 768; object-fit: cover; }
