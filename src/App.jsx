@@ -94,31 +94,32 @@ function useSlides() {
         key: 'raw', kind: 'raw', label: 'Raw products', href: '#shop', cta: 'Shop the harvest',
         kicker: 'Raw product range', title: 'Pure, natural harvest',
         tagline: 'Kithul jaggery and treacle, beli mal, ranawara, olu haal and meneri, straight from Lakshapana and Thanamalwila.',
-        tiles: hero.map((p) => ({ src: p.image, focus: p.focus, name: p.name.replace(' Rice', '').replace('Water Lily', 'Olu Haal') })),
+        price: `From ${fmt(400)}`,
+        tiles: hero.map((p, j) => ({ src: p.image, focus: p.focus, name: ['Jaggery', 'Treacle', 'Beli Mal', 'Ranawara', 'Olu Haal', 'Meneri'][j] })),
       },
       {
         key: 'fizzy', kind: 'fizzy', label: 'Fizzy drinks', href: '#fizzy', cta: 'Explore the Fizzy Corner',
         kicker: 'The Fizzy Corner', title: 'Ginger bug sodas',
         tagline: 'Pineapple, mango, pomegranate, sweet orange and watermelon. Naturally sparkling, no sugar added, sweetened with bee honey.',
-        image: './media/fizzy/bottle-pineapple.jpg',
+        tiles: ['mango', 'pomegranate', 'watermelon', 'sweet-orange'].map((f) => ({ src: `./media/fizzy/bottle-${f}.jpg` })),
       },
       {
         key: 'peanuts', kind: 'peanuts', label: 'Peanuts', href: '#peanuts', cta: 'Shop the peanuts',
         kicker: 'Snack time', title: 'Flavoured peanuts', price: `${fmt(300)} / 50g`,
         tagline: 'Chocolate, Kithul, Classic Salted and Spicy. Real Thanamalwila peanuts, roasted and tossed in flavour.',
-        tiles: ['chocolate', 'kithul', 'salted', 'spicy'].map((f) => ({ src: `./media/peanuts/${f}.jpg` })),
+        tiles: [['chocolate', 'Chocolate'], ['kithul', 'Kithul'], ['salted', 'Classic Salted'], ['spicy', 'Spicy']].map(([f, name]) => ({ src: `./media/peanuts/${f}.jpg`, name })),
       },
       {
         key: 'hampers', kind: 'hampers', label: 'Gift hampers', href: '#hampers', cta: 'See what is coming',
         kicker: 'Gifting · Coming soon', title: 'Create your own hamper',
         tagline: 'Pick your favourites from our pantry, peanuts and sodas, made into a Tropicai gift.',
-        tiles: ['./media/kithul-treacle.jpg', './media/water-lily-rice.jpg', './media/peanuts/kithul.jpg', './media/ranawara.jpg'].map((src) => ({ src })),
+        tiles: ['./media/kithul-treacle.jpg', './media/water-lily-rice.jpg', './media/peanuts/kithul.jpg', './media/fizzy/bottle-mango.jpg'].map((src) => ({ src })),
       },
     ]
   }, [])
 }
 
-function HeroSlider() {
+function Banner() {
   const slides = useSlides()
   const [i, setI] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -129,47 +130,45 @@ function HeroSlider() {
   useEffect(() => {
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (paused || reduce) return
-    const t = setInterval(() => setI((x) => (x + 1) % n), 5500)
+    const t = setInterval(() => setI((x) => (x + 1) % n), 6000)
     return () => clearInterval(t)
   }, [paused, n])
   return (
-    <div className="slider" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
+    <section className="banner" id="top" aria-roledescription="carousel" aria-label="Our product ranges"
+      onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => { touch.current = e.touches[0].clientX; swiped.current = false }}
       onTouchEnd={(e) => { if (touch.current == null) return; const d = e.changedTouches[0].clientX - touch.current; if (Math.abs(d) > 40) { swiped.current = true; go(i + (d < 0 ? 1 : -1)) } touch.current = null }}>
-      <div className="slides" aria-roledescription="carousel">
+      <div className="bn-track">
         {slides.map((s, k) => (
-          <a key={s.key} href={s.href} className={`slide slide-${s.kind}${k === i ? ' on' : ''}`} aria-hidden={k !== i} tabIndex={k === i ? 0 : -1}
+          <a key={s.key} href={s.href} className={`bn-slide bn-${s.kind}${k === i ? ' on' : ''}`} aria-hidden={k !== i} tabIndex={k === i ? 0 : -1}
             onClick={(e) => { if (swiped.current) { e.preventDefault(); swiped.current = false } }}>
-            {s.tiles ? (
-              <div className={`slide-grid g${s.tiles.length}`}>
+            {s.kind === 'fizzy' && <Droplets count={60} seed={5} />}
+            <div className="bn-inner">
+              <div className="bn-text">
+                <p className="bn-kicker">{s.kicker}</p>
+                <h2>{s.title}</h2>
+                <p className="bn-line">{s.tagline}</p>
+                <div className="bn-foot">
+                  {s.price && <span className="bn-price">{s.price}</span>}
+                  <span className="btn bn-btn">{s.cta} →</span>
+                </div>
+              </div>
+              <div className={`bn-tiles t${s.tiles.length}`}>
                 {s.tiles.map((t, j) => (
-                  <div key={j} className="tile">
+                  <div key={j} className="bn-tile" style={{ '--d': `${j * 70}ms` }}>
                     <img src={t.src} alt="" style={{ objectPosition: t.focus || 'center' }} />
                     {t.name && <span>{t.name}</span>}
                   </div>
                 ))}
-              </div>
-            ) : (
-              <img className="slide-img" src={s.image} alt={s.title} />
-            )}
-            {s.kind === 'fizzy' && <Droplets count={30} seed={11} />}
-            {s.kind === 'hampers' && <span className="slide-ribbon">Coming soon</span>}
-            <div className="slide-cap">
-              <p className="slide-kicker">{s.kicker}</p>
-              <h3>{s.title}</h3>
-              <p className="slide-line">{s.tagline}</p>
-              <div className="slide-foot">
-                {s.price && <span className="slide-price">{s.price}</span>}
-                <span className="btn small slide-btn">{s.cta} →</span>
+                {s.kind === 'hampers' && <span className="bn-ribbon">Coming soon</span>}
               </div>
             </div>
           </a>
         ))}
-        <button className="slide-nav prev" onClick={() => go(i - 1)} aria-label="Previous slide">‹</button>
-        <button className="slide-nav next" onClick={() => go(i + 1)} aria-label="Next slide">›</button>
-        <span className="slide-count">{i + 1} / {n}</span>
       </div>
-      <div className="slide-rail" role="tablist">
+      <button className="bn-nav prev" onClick={() => go(i - 1)} aria-label="Previous slide">‹</button>
+      <button className="bn-nav next" onClick={() => go(i + 1)} aria-label="Next slide">›</button>
+      <div className="bn-dots" role="tablist">
         {slides.map((s, k) => (
           <button key={s.key} role="tab" aria-selected={k === i} className={k === i ? 'on' : ''} onClick={() => go(k)}>
             {s.label}
@@ -177,16 +176,23 @@ function HeroSlider() {
           </button>
         ))}
       </div>
-    </div>
+    </section>
   )
 }
 
-function Hero({ onOpen, onViewCert }) {
+function Intro({ onViewCert }) {
   return (
-    <section className="hero" id="top">
-      <div className="hero-text">
+    <section className="intro">
+      <div className="intro-map">
+        <video src="./media/sourcing-map.mp4" poster="./media/sourcing-map.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="Map of Sri Lanka showing where Tropicai sources its products" />
+        <div className="map-legend">
+          <span><b>📍 Lakshapana</b> Kithul treacle, jaggery and flour</span>
+          <span><b>📍 Thanamalwila</b> Grains, herbal flowers, peanuts and coffee</span>
+        </div>
+      </div>
+      <div className="intro-text">
         <p className="eyebrow">Farm direct from Sri Lanka</p>
-        <h1>Nature's purest,<br /><em>delivered to your doorstep.</em></h1>
+        <h1>Nature's purest, <em>delivered to your doorstep.</em></h1>
         <p className="lead">
           Kithul treacle and jaggery from the forests of Lakshapana. Heritage grains, herbal flowers and peanuts
           from the dry zone farms of Thanamalwila. Grown slowly, made by hand, packed with care.
@@ -195,6 +201,11 @@ function Hero({ onOpen, onViewCert }) {
           <a href="#shop" className="btn primary">Shop the harvest</a>
           <a href="#process" className="btn ghost">Watch how it's made</a>
         </div>
+        <ul className="trust">
+          <li><strong>100%</strong> natural</li>
+          <li><strong>2</strong> sourcing regions</li>
+          <li><strong>Farm</strong> direct</li>
+        </ul>
         <div className="gm-hero" id="good-market">
           <img src="./media/good-market-seal.png" alt="Good Market Approved seal" />
           <div>
@@ -206,14 +217,6 @@ function Hero({ onOpen, onViewCert }) {
             </div>
           </div>
         </div>
-        <ul className="trust">
-          <li><strong>100%</strong> natural</li>
-          <li><strong>2</strong> sourcing regions</li>
-          <li><strong>Farm</strong> direct</li>
-        </ul>
-      </div>
-      <div className="hero-art">
-        <HeroSlider />
       </div>
     </section>
   )
@@ -482,41 +485,6 @@ function GoodMarket({ onView }) {
           <img src="./media/good-market-certificate.jpg" alt="Tropicai Good Market approval certificate" loading="lazy" />
         </button>
       </div>
-    </section>
-  )
-}
-
-function PromoBands() {
-  return (
-    <section className="bands" aria-label="Explore our ranges">
-      <a href="#fizzy" className="band band-fizzy">
-        <Droplets count={18} seed={7} />
-        <img src="./media/fizzy/bottle-mango.jpg" alt="" />
-        <span className="band-text">
-          <small>New · The Fizzy Corner</small>
-          <strong>Naturally sparkling ginger bug sodas</strong>
-          <em>No sugar added · Sweetened with bee honey</em>
-        </span>
-        <span className="band-arrow">→</span>
-      </a>
-      <a href="#peanuts" className="band band-peanuts">
-        <img src="./media/peanuts/kithul.jpg" alt="" />
-        <span className="band-text">
-          <small>Snack time · Flavoured peanuts</small>
-          <strong>Chocolate, Kithul, Salted & Spicy</strong>
-          <em>50g packs · {fmt(300)} each</em>
-        </span>
-        <span className="band-arrow">→</span>
-      </a>
-      <a href="#hampers" className="band band-hampers">
-        <img src="./media/kithul-treacle.jpg" alt="" />
-        <span className="band-text">
-          <small>Gifting · Coming soon</small>
-          <strong>Create your own hamper</strong>
-          <em>Your favourites, made into a gift</em>
-        </span>
-        <span className="band-arrow">→</span>
-      </a>
     </section>
   )
 }
@@ -873,8 +841,8 @@ export default function App() {
       <div className="announce">Fresh harvest from Lakshapana and Thanamalwila · <a href="#fizzy">New: Fizzy Corner sodas</a> · Order on WhatsApp {WHATSAPP_DISPLAY}</div>
       <Header count={count} onCart={() => setCartOpen(true)} />
       <main>
-        <Hero onOpen={openModal} onViewCert={() => setCertOpen(true)} />
-        <PromoBands />
+        <Banner />
+        <Intro onViewCert={() => setCertOpen(true)} />
         <Shop cart={cart} add={add} open={openModal} />
         <Peanuts cart={cart} add={add} open={openModal} />
         <FizzyCorner cart={cart} add={add} open={openModal} />
