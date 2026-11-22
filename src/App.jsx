@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, fmt, fmtPrice } from './data.js'
+import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, SOCIAL, GOOD_MARKET_URL, fmt, fmtPrice } from './data.js'
 
 const CART_KEY = 'tropicai_cart_v2'
 const keyOf = (id, vi) => `${id}::${vi}`
@@ -34,6 +34,30 @@ const WaIcon = () => (
     <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2Z" />
   </svg>
 )
+
+const Icon = {
+  instagram: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none" /></svg>
+  ),
+  tiktok: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.3 2.3 1.7 3.9 4 4.1v3.1a7.3 7.3 0 0 1-4-1.2v6.2a5.8 5.8 0 1 1-5.8-5.8c.3 0 .6 0 .9.1v3.2a2.7 2.7 0 1 0 1.9 2.6V3h3Z" /></svg>
+  ),
+  facebook: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.6h2.6l.4-3h-3V8.5c0-.9.3-1.5 1.5-1.5h1.6V4.3a21 21 0 0 0-2.3-.1c-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1Z" /></svg>
+  ),
+}
+
+function SocialLinks({ className = '' }) {
+  return (
+    <div className={`social ${className}`}>
+      {[['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['facebook', 'Facebook']].map(([k, name]) => (
+        <a key={k} href={SOCIAL[k].url} target="_blank" rel="noopener noreferrer" aria-label={`Tropicai on ${name}`} title={`${name} · ${SOCIAL[k].handle}`}>
+          {Icon[k]}<span>{name}</span>
+        </a>
+      ))}
+    </div>
+  )
+}
 
 function Header({ count, onCart }) {
   return (
@@ -85,7 +109,7 @@ function Hero() {
         <ul className="trust">
           <li><strong>100%</strong> natural</li>
           <li><strong>2</strong> sourcing regions</li>
-          <li><strong>Good Market</strong> approved vendor</li>
+          <li><a href="#good-market" className="trust-link"><strong>Good Market</strong> approved vendor ✓</a></li>
         </ul>
       </div>
       <div className="hero-art">
@@ -268,6 +292,31 @@ function FizzyCorner({ cart, add, open }) {
   )
 }
 
+function GoodMarket({ onView }) {
+  return (
+    <section className="gm" id="good-market">
+      <div className="gm-inner">
+        <img className="gm-seal" src="./media/good-market-seal.png" alt="Good Market Approved seal" />
+        <div className="gm-text">
+          <p className="eyebrow">Certified</p>
+          <h2>Good Market approved since May 2026</h2>
+          <p>
+            Tropicai has been a Good Market approved vendor since 25 May 2026. Good Market is a digital commons for
+            people creating a better world: good for people, good for the planet.
+          </p>
+          <div className="gm-actions">
+            <a className="btn primary" href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">See us on Good Market ↗</a>
+            <button className="btn ghost" onClick={onView}>View certificate</button>
+          </div>
+        </div>
+        <button className="gm-cert" onClick={onView} aria-label="View Good Market certificate">
+          <img src="./media/good-market-certificate.jpg" alt="Tropicai Good Market approval certificate" loading="lazy" />
+        </button>
+      </div>
+    </section>
+  )
+}
+
 function Story() {
   return (
     <section className="story" id="story">
@@ -350,6 +399,13 @@ function Contact() {
         <div>
           <h4>Find us</h4>
           <p>Good Market pop up stalls, selected cafés, and wholesale on request.</p>
+          <a className="gm-foot" href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">
+            <img src="./media/good-market-seal.png" alt="" /> Good Market approved ↗
+          </a>
+        </div>
+        <div>
+          <h4>Follow us</h4>
+          <SocialLinks className="social-foot" />
         </div>
       </div>
       <p className="copy">© {new Date().getFullYear()} Tropicai. Made with care in Sri Lanka.</p>
@@ -584,13 +640,14 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false)
   const [modal, setModal] = useState(null)
   const [section, setSection] = useState(null)
+  const [certOpen, setCertOpen] = useState(false)
   const openModal = (p, sec = null) => { setSection(sec); setModal(p) }
   const [toast, setToast] = useState('')
 
   useEffect(() => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)) } catch { /* ignore */ } }, [cart])
   useEffect(() => {
-    document.body.style.overflow = cartOpen || modal ? 'hidden' : ''
-  }, [cartOpen, modal])
+    document.body.style.overflow = cartOpen || modal || certOpen ? 'hidden' : ''
+  }, [cartOpen, modal, certOpen])
 
   const count = useMemo(() => Object.values(cart).reduce((a, b) => a + b, 0), [cart])
   const add = (id, vi = 0) => {
@@ -616,10 +673,20 @@ export default function App() {
         <Shop cart={cart} add={add} open={openModal} />
         <FizzyCorner cart={cart} add={add} open={openModal} />
         <Story />
+        <GoodMarket onView={() => setCertOpen(true)} />
         <Process />
         <Gallery />
       </main>
       <Contact />
+      {certOpen && (
+        <div className="zoom" onClick={() => setCertOpen(false)}>
+          <div className="zoom-scroll cert-scroll" onClick={(e) => e.stopPropagation()}>
+            <img src="./media/good-market-certificate.jpg" alt="Tropicai Good Market approval certificate" />
+          </div>
+          <p className="zoom-hint"><a href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">Verify on goodmarket.global ↗</a> · tap outside or × to close</p>
+          <button className="x" aria-label="Close" onClick={() => setCertOpen(false)}>×</button>
+        </div>
+      )}
       <Modal p={modal} section={section} qty={modal && qtyOf(cart, modal.id)} onClose={() => setModal(null)} onAdd={add} />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} cart={cart} setQty={setQty} clear={() => setCart({})} />
       {count > 0 && !cartOpen && (

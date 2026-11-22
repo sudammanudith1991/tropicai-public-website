@@ -3,6 +3,13 @@
 export const WHATSAPP_NUMBER = '94711583293'
 export const WHATSAPP_DISPLAY = '+94 71 158 3293'
 
+export const SOCIAL = {
+  instagram: { url: 'https://www.instagram.com/tropicai_sl/', handle: '@tropicai_sl' },
+  tiktok: { url: 'https://www.tiktok.com/@tropicai5', handle: '@tropicai5' },
+  facebook: { url: 'https://www.facebook.com/people/Tropicai-Purely-Sourced/61586343067315/', handle: 'Tropicai Purely Sourced' },
+}
+export const GOOD_MARKET_URL = 'https://www.goodmarket.global/tropicai'
+
 const m = (f) => `./media/${f}`
 
 export const CATEGORIES = [
