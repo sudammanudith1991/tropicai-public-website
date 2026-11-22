@@ -15,3 +15,10 @@
   for = "/media/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+# Old GoDaddy parking page sent browsers to /lander; send them home instead.
+[[redirects]]
+  from = "/lander"
+  to = "/"
+  status = 301
+  force = true
