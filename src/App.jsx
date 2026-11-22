@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, SOCIAL, GOOD_MARKET_URL, fmt, fmtPrice } from './data.js'
+import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, PEANUTS, SOCIAL, GOOD_MARKET_URL, fmt, fmtPrice } from './data.js'
 
 const CART_KEY = 'tropicai_cart_v2'
 const keyOf = (id, vi) => `${id}::${vi}`
@@ -68,7 +68,8 @@ function Header({ count, onCart }) {
       </a>
       <nav className="nav">
         <a href="#shop">Shop</a>
-        <a href="#fizzy" className="nav-fizzy">Fizzy Corner</a>
+        <a href="#peanuts">Peanuts</a>
+        <a href="#hampers">Hampers</a>
         <a href="#story">Our Story</a>
         <a href="#process">Process</a>
         <a href="#contact">Contact</a>
@@ -231,6 +232,77 @@ function Bubbles({ count = 26 }) {
         <span key={i} style={{ left: `${b.left}%`, width: b.size, height: b.size, animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />
       ))}
     </div>
+  )
+}
+
+function PeanutCard({ p, qty, onAdd, onOpen }) {
+  const v = p.variants[0]
+  return (
+    <article className="pn-card">
+      <button className="pn-img" onClick={() => onOpen(p)} aria-label={`View ${p.name}`}>
+        <img src={p.image} alt={p.name} loading="lazy" />
+        <span className={`pn-taste ${p.taste.toLowerCase()}`}>{p.taste}</span>
+      </button>
+      <div className="pn-body">
+        <h3><span aria-hidden="true">{p.emoji}</span> {p.short} {p.sinhala && <span className="si">{p.sinhala}</span>}</h3>
+        <p className="pn-blurb">{p.blurb}</p>
+        <div className="card-foot">
+          <span className="price">{fmt(v.price)} <small>/ {v.label}</small></span>
+          <button className="btn small primary" onClick={() => onAdd(p.id, 0)}>{qty ? `Added (${qty}) +` : 'Add to cart'}</button>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function Peanuts({ cart, add, open }) {
+  return (
+    <section className="peanuts" id="peanuts">
+      <div className="pn-inner">
+        <div className="section-head">
+          <p className="eyebrow">Snack time</p>
+          <h2>Assorted flavoured peanuts</h2>
+          <p>Real Thanamalwila peanuts, roasted and tossed in your favourite flavour. Every flavour comes in a 50g pack for {fmt(300)}.</p>
+        </div>
+        <div className="pn-grid">
+          {PEANUTS.map((p) => <PeanutCard key={p.id} p={p} qty={qtyOf(cart, p.id)} onAdd={add} onOpen={open} />)}
+        </div>
+        <p className="pn-note">🥜 Mix and match: pick a few flavours and we'll pack them together for your order.</p>
+      </div>
+    </section>
+  )
+}
+
+function Hampers() {
+  const msg = encodeURIComponent("Hello Tropicai! Please let me know when the Create your own hamper option is available.")
+  return (
+    <section className="hampers" id="hampers">
+      <div className="hm-inner">
+        <div className="hm-art" aria-hidden="true">
+          <img src="./media/kithul-treacle.jpg" alt="" />
+          <img src="./media/water-lily-rice.jpg" alt="" />
+          <img src="./media/peanuts/kithul.jpg" alt="" />
+          <img src="./media/ranawara.jpg" alt="" />
+          <span className="hm-ribbon">Coming soon</span>
+        </div>
+        <div className="hm-text">
+          <p className="eyebrow">Gifting</p>
+          <h2>Create your own hamper</h2>
+          <p>
+            Hand pick your favourites, from kithul treacle and heritage rice to herbal teas, flavoured peanuts and ginger bug sodas,
+            and we'll pack them into a beautiful Tropicai gift hamper. Perfect for festivals, birthdays and thank yous.
+          </p>
+          <ul className="hm-points">
+            <li>Choose exactly what goes in</li>
+            <li>Mix our pantry, peanuts and sodas</li>
+            <li>Gift ready for any occasion</li>
+          </ul>
+          <a className="btn primary" href={`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`} target="_blank" rel="noopener noreferrer">
+            <WaIcon /> Notify me on WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -671,7 +743,9 @@ export default function App() {
       <main>
         <Hero />
         <Shop cart={cart} add={add} open={openModal} />
+        <Peanuts cart={cart} add={add} open={openModal} />
         <FizzyCorner cart={cart} add={add} open={openModal} />
+        <Hampers />
         <Story />
         <GoodMarket onView={() => setCertOpen(true)} />
         <Process />

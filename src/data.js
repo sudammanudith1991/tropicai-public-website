@@ -85,7 +85,6 @@ export const MORE_PRODUCTS = [
   { id: 'horse-gram', name: 'Horse Gram', sinhala: 'කොල්ලු', category: 'nuts', origin: 'Thanamalwila' },
   { id: 'mung-beans', name: 'Mung Beans', sinhala: 'මුං ඇට', category: 'nuts', origin: 'Thanamalwila' },
   { id: 'cowpea', name: 'Cowpea', sinhala: 'කවුපි', category: 'nuts', origin: 'Thanamalwila' },
-  { id: 'peanut-cups', name: 'Flavoured Peanut Cups', sinhala: 'රට කජු කෝප්ප', category: 'nuts', origin: 'Made by Tropicai' },
 ].map((p) => ({ ...p, variants: [{ label: null, price: null }] }))
 
 // Fizzy Corner: naturally sparkling ginger bug sodas.
@@ -129,7 +128,36 @@ export const DRINKS = [
   },
 ]
 
-export const ALL_ITEMS = [...PRODUCTS, ...MORE_PRODUCTS, ...DRINKS]
+// Assorted flavoured peanuts, 50g packs.
+const pn = (x) => `./media/peanuts/${x}`
+export const PEANUTS = [
+  {
+    id: 'peanuts-chocolate', name: 'Chocolate Peanuts', short: 'Chocolate', emoji: '🍫', taste: 'Sweet',
+    variants: [{ label: '50g', price: 300 }], image: pn('chocolate.jpg'), category: 'peanuts', origin: 'Thanamalwila',
+    blurb: 'Roasted Thanamalwila peanuts coated in rich chocolate. A sweet treat for kids and grown ups alike.',
+    tags: ['Sweet', 'Roasted peanuts'],
+  },
+  {
+    id: 'peanuts-kithul', name: 'Kithul Peanuts', short: 'Kithul', emoji: '🍯', taste: 'Sweet',
+    variants: [{ label: '50g', price: 300 }], image: pn('kithul.jpg'), category: 'peanuts', origin: 'Thanamalwila',
+    blurb: 'Glazed with our own Lakshapana kithul treacle for a smoky, caramel crunch.',
+    tags: ['Sweet', 'Kithul glazed'],
+  },
+  {
+    id: 'peanuts-salted', name: 'Classic Salted Peanuts', short: 'Classic Salted', emoji: '🧂', taste: 'Savoury',
+    variants: [{ label: '50g', price: 300 }], image: pn('salted.jpg'), category: 'peanuts', origin: 'Thanamalwila',
+    blurb: 'Simply roasted and lightly salted. The timeless crunchy snack.',
+    tags: ['Savoury', 'Roasted peanuts'],
+  },
+  {
+    id: 'peanuts-spicy', name: 'Spicy Peanuts', short: 'Spicy', sinhala: 'දැවෙන', emoji: '🌶️', taste: 'Savoury',
+    variants: [{ label: '50g', price: 300 }], image: pn('spicy.jpg'), category: 'peanuts', origin: 'Thanamalwila',
+    blurb: 'Tossed in Sri Lankan chilli spices. Hot, crunchy and seriously addictive.',
+    tags: ['Savoury', 'Chilli spiced'],
+  },
+]
+
+export const ALL_ITEMS = [...PRODUCTS, ...MORE_PRODUCTS, ...PEANUTS, ...DRINKS]
 
 export const fmt = (n) => 'Rs ' + n.toLocaleString('en-LK')
 export const fmtPrice = (n) => (n == null ? 'Price on request' : fmt(n))
