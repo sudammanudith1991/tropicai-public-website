@@ -27,8 +27,8 @@ export const PRODUCTS = [
     tags: ['Handmade', 'Unrefined'],
   },
   {
-    id: 'kithul-flour', name: 'Kithul Flour', sinhala: 'කිතුල් පිටි', variants: [{ label: '500g', price: 1000 }, { label: '250g', price: 550 }],
-    category: 'kithul', origin: 'Lakshapana', image: m('kithul-flour.jpg'), focus: '55% 50%',
+    id: 'kithul-flour', name: 'Kithul Flour', sinhala: 'කිතුල් පිටි', variants: [{ label: '500g', price: 1000 }, { label: '250g', price: 500 }],
+    category: 'kithul', origin: 'Lakshapana', image: m('kithul-flour.jpg'),
     blurb: 'Starch drawn from the pith of the kithul palm and sun dried. Use it for kithul thalapa, porridge and traditional sweets.',
     tags: ['Traditional', 'Sun dried'],
   },
