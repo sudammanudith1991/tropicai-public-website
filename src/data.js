@@ -52,14 +52,14 @@ export const PRODUCTS = [
     tags: ['Gluten free', 'Dry zone millet'],
   },
   {
-    id: 'peanuts', name: 'Peanuts', sinhala: 'රට කජු', variants: [{ label: null, price: null }],
+    id: 'peanuts', name: 'Peanuts', sinhala: 'රට කජු', variants: [{ label: '500g', price: 800 }, { label: '250g', price: 400 }],
     category: 'nuts', origin: 'Thanamalwila', image: m('peanuts.jpg'),
     blurb: 'Red skinned peanuts straight from Thanamalwila farms. Roast them, boil them, or blend into your own peanut butter.',
     tags: ['Farm fresh', 'Raw'],
   },
   {
-    id: 'beli-pieces', name: 'Beli Pieces', sinhala: 'බෙලි පෙති', variants: [{ label: null, price: null }],
-    category: 'herbal', origin: 'Thanamalwila', image: m('beli.jpg'), focus: '22% 60%',
+    id: 'beli-pieces', name: 'Beli Pieces', sinhala: 'බෙලි පෙති', variants: [{ label: '100g', price: 350 }],
+    category: 'herbal', origin: 'Thanamalwila', image: m('beli-pieces.jpg'),
     blurb: 'Sun dried slices of bael fruit. Simmer for a soothing, naturally sweet beli tea, a Sri Lankan favourite for the stomach.',
     tags: ['Sun dried', 'Caffeine free'],
   },
@@ -75,14 +75,28 @@ export const PRODUCTS = [
     blurb: 'Golden avaram flowers, dried whole. Ranawara tea is a traditional village brew with a gentle, earthy sweetness.',
     tags: ['Whole flowers', 'Caffeine free'],
   },
+  {
+    id: 'finger-millet', name: 'Kurakkan', sinhala: 'කුරක්කන්', variants: [{ label: '500g', price: 500 }],
+    category: 'grains', origin: 'Thanamalwila', image: m('finger-millet.jpg'),
+    blurb: 'Finger millet from the dry zone. A wholesome favourite for kurakkan roti, pittu and warm porridge.',
+    tags: ['Finger millet', 'Dry zone grown'],
+  },
+  {
+    id: 'mung-beans', name: 'Mung Beans', sinhala: 'මුං ඇට', variants: [{ label: '1kg', price: 1000 }, { label: '500g', price: 500 }, { label: '250g', price: 250 }],
+    category: 'nuts', origin: 'Thanamalwila', image: m('mung-beans.jpg'),
+    blurb: 'Green mung beans for mung ata kiribath, curries, sprouts and sweet mung kevum.',
+    tags: ['Legume', 'Farm fresh'],
+  },
+  {
+    id: 'horse-gram', name: 'Horse Gram', sinhala: 'කොල්ලු', variants: [{ label: '500g', price: 700 }, { label: '250g', price: 400 }],
+    category: 'nuts', origin: 'Thanamalwila', image: m('horse-gram.jpg'),
+    blurb: 'Kollu, a hardy village legume. Lovely in kollu kanda, soups and spicy tempered dishes.',
+    tags: ['Legume', 'Village staple'],
+  },
 ]
 
 // Products without photos yet; customers can add them as enquiries.
-export const MORE_PRODUCTS = [
-  { id: 'finger-millet', name: 'Finger Millet (Kurakkan)', sinhala: 'කුරක්කන්', category: 'grains', origin: 'Thanamalwila' },
-  { id: 'horse-gram', name: 'Horse Gram', sinhala: 'කොල්ලු', category: 'nuts', origin: 'Thanamalwila' },
-  { id: 'mung-beans', name: 'Mung Beans', sinhala: 'මුං ඇට', category: 'nuts', origin: 'Thanamalwila' },
-].map((p) => ({ ...p, variants: [{ label: null, price: null }] }))
+export const MORE_PRODUCTS = []
 
 // Fizzy Corner: naturally sparkling ginger bug sodas.
 // Prices not set yet (null shows "Price on request").
@@ -90,35 +104,35 @@ const f = (x) => `./media/fizzy/${x}`
 export const DRINKS = [
   {
     id: 'soda-pineapple', name: 'Pineapple Soda', short: 'Pineapple', accent: '#f6a21e',
-    variants: [{ label: '375ml', price: null }, { label: '200ml', price: null }],
+    variants: [{ label: '375ml', price: 750 }, { label: '200ml', price: 490 }],
     image: f('bottle-pineapple.jpg'), fruit: f('fruit-pineapple.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
     blurb: 'Ripe pineapple and fresh ginger, slowly fermented into a bright, tangy sparkle. Tropical sunshine in a bottle.',
     tags: ['Naturally sparkling', 'Sweetened with bee honey'],
   },
   {
     id: 'soda-mango', name: 'Mango Soda', short: 'Mango', accent: '#f2862a',
-    variants: [{ label: '375ml', price: null }],
+    variants: [{ label: '375ml', price: 650 }],
     image: f('bottle-mango.jpg'), fruit: f('fruit-mango.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
     blurb: 'Juicy ripe mango meets a gentle ginger fizz. Smooth, golden and lightly tangy.',
     tags: ['Naturally sparkling', 'Sweetened with bee honey'],
   },
   {
     id: 'soda-pomegranate', name: 'Pomegranate Soda', short: 'Pomegranate', accent: '#e8336f',
-    variants: [{ label: '200ml', price: null }],
+    variants: [{ label: '200ml', price: 600 }],
     image: f('bottle-pomegranate.jpg'), fruit: f('fruit-pomegranate.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
     blurb: 'Ruby pomegranate with a crisp ginger finish. Tart, elegant and beautifully pink.',
     tags: ['Naturally sparkling', 'Sweetened with bee honey'],
   },
   {
     id: 'soda-sweet-orange', name: 'Sweet Orange Soda', short: 'Sweet Orange', accent: '#f4b632',
-    variants: [{ label: '375ml', price: null }],
+    variants: [{ label: '375ml', price: 700 }],
     image: f('bottle-sweet-orange.jpg'), fruit: f('fruit-sweet-orange.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
     blurb: 'Green skinned Sri Lankan sweet orange, zesty and refreshing, with a lively ginger kick.',
     tags: ['Naturally sparkling', 'Sweetened with bee honey'],
   },
   {
     id: 'soda-watermelon', name: 'Watermelon Soda', short: 'Watermelon', accent: '#f0608f',
-    variants: [{ label: '375ml', price: null }],
+    variants: [{ label: '375ml', price: 650 }],
     image: f('bottle-watermelon.jpg'), fruit: f('fruit-watermelon.jpg'), category: 'fizzy', origin: 'Ginger bug soda',
     blurb: 'Fresh watermelon, light and thirst quenching, with a soft natural fizz. A hot day essential.',
     tags: ['Naturally sparkling', 'Sweetened with bee honey'],
