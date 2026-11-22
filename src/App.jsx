@@ -94,7 +94,6 @@ function useSlides() {
         key: 'raw', kind: 'raw', label: 'Raw products', href: '#shop', cta: 'Shop the harvest',
         kicker: 'Raw product range', title: 'Pure, natural harvest',
         tagline: 'Kithul jaggery and treacle, beli mal, ranawara, olu haal and meneri, straight from Lakshapana and Thanamalwila.',
-        price: `From ${fmt(400)}`,
         tiles: hero.map((p, j) => ({ src: p.image, focus: p.focus, name: ['Jaggery', 'Treacle', 'Beli Mal', 'Ranawara', 'Olu Haal', 'Meneri'][j] })),
       },
       {
@@ -105,7 +104,7 @@ function useSlides() {
       },
       {
         key: 'peanuts', kind: 'peanuts', label: 'Peanuts', href: '#peanuts', cta: 'Shop the peanuts',
-        kicker: 'Snack time', title: 'Flavoured peanuts', price: `${fmt(300)} / 50g`,
+        kicker: 'Snack time', title: 'Flavoured peanuts',
         tagline: 'Chocolate, Kithul, Classic Salted and Spicy. Real Thanamalwila peanuts, roasted and tossed in flavour.',
         tiles: [['chocolate', 'Chocolate'], ['kithul', 'Kithul'], ['salted', 'Classic Salted'], ['spicy', 'Spicy']].map(([f, name]) => ({ src: `./media/peanuts/${f}.jpg`, name })),
       },
@@ -113,7 +112,7 @@ function useSlides() {
         key: 'hampers', kind: 'hampers', label: 'Gift hampers', href: '#hampers', cta: 'See what is coming',
         kicker: 'Gifting · Coming soon', title: 'Create your own hamper',
         tagline: 'Pick your favourites from our pantry, peanuts and sodas, made into a Tropicai gift.',
-        tiles: ['./media/kithul-treacle.jpg', './media/water-lily-rice.jpg', './media/peanuts/kithul.jpg', './media/fizzy/bottle-mango.jpg'].map((src) => ({ src })),
+        tiles: [{ src: './media/hamper.svg' }],
       },
     ]
   }, [])
@@ -149,7 +148,6 @@ function Banner() {
                 <h2>{s.title}</h2>
                 <p className="bn-line">{s.tagline}</p>
                 <div className="bn-foot">
-                  {s.price && <span className="bn-price">{s.price}</span>}
                   <span className="btn bn-btn">{s.cta} →</span>
                 </div>
               </div>
@@ -187,16 +185,13 @@ function Intro({ onViewCert }) {
         <video src="./media/sourcing-map.mp4" poster="./media/sourcing-map.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="Map of Sri Lanka showing where Tropicai sources its products" />
         <div className="map-legend">
           <span><b>📍 Lakshapana</b> Kithul treacle, jaggery and flour</span>
-          <span><b>📍 Thanamalwila</b> Grains, herbal flowers, peanuts and coffee</span>
+          <span><b>📍 Thanamalwila</b> Grains, herbal flowers and peanuts</span>
         </div>
       </div>
       <div className="intro-text">
         <p className="eyebrow">Farm direct from Sri Lanka</p>
         <h1>Nature's purest, <em>delivered to your doorstep.</em></h1>
-        <p className="lead">
-          Kithul treacle and jaggery from the forests of Lakshapana. Heritage grains, herbal flowers and peanuts
-          from the dry zone farms of Thanamalwila. Grown slowly, made by hand, packed with care.
-        </p>
+        <p className="lead">Kithul from Lakshapana. Grains, herbal flowers and peanuts from Thanamalwila. Made by hand, packed with care.</p>
         <div className="hero-cta">
           <a href="#shop" className="btn primary">Shop the harvest</a>
           <a href="#process" className="btn ghost">Watch how it's made</a>
@@ -379,10 +374,7 @@ function Hampers() {
     <section className="hampers" id="hampers">
       <div className="hm-inner">
         <div className="hm-art" aria-hidden="true">
-          <img src="./media/kithul-treacle.jpg" alt="" />
-          <img src="./media/water-lily-rice.jpg" alt="" />
-          <img src="./media/peanuts/kithul.jpg" alt="" />
-          <img src="./media/ranawara.jpg" alt="" />
+          <img src="./media/hamper.svg" alt="" />
           <span className="hm-ribbon">Coming soon</span>
         </div>
         <div className="hm-text">
@@ -509,7 +501,7 @@ function Story() {
           </div>
           <div>
             <h4>Thanamalwila</h4>
-            <p>Sunny dry zone farmland and village tanks, home to our peanuts, millets, water lily rice, legumes, Arabica coffee and herbal flowers.</p>
+            <p>Sunny dry zone farmland and village tanks, home to our peanuts, millets, water lily rice, legumes and herbal flowers.</p>
           </div>
         </div>
         <ul className="values">

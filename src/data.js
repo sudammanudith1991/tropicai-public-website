@@ -79,12 +79,9 @@ export const PRODUCTS = [
 
 // Products without photos yet; customers can add them as enquiries.
 export const MORE_PRODUCTS = [
-  { id: 'arabica-coffee', name: 'Arabica Coffee', sinhala: 'කෝපි', category: 'grains', origin: 'Thanamalwila' },
   { id: 'finger-millet', name: 'Finger Millet (Kurakkan)', sinhala: 'කුරක්කන්', category: 'grains', origin: 'Thanamalwila' },
-  { id: 'heirloom-rice', name: 'Heirloom Rice Varieties', sinhala: 'පාරම්පරික සහල්', category: 'grains', origin: 'Thanamalwila' },
   { id: 'horse-gram', name: 'Horse Gram', sinhala: 'කොල්ලු', category: 'nuts', origin: 'Thanamalwila' },
   { id: 'mung-beans', name: 'Mung Beans', sinhala: 'මුං ඇට', category: 'nuts', origin: 'Thanamalwila' },
-  { id: 'cowpea', name: 'Cowpea', sinhala: 'කවුපි', category: 'nuts', origin: 'Thanamalwila' },
 ].map((p) => ({ ...p, variants: [{ label: null, price: null }] }))
 
 // Fizzy Corner: naturally sparkling ginger bug sodas.
