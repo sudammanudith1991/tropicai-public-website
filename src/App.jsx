@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CATEGORIES, PRODUCTS, MORE_PRODUCTS, ALL_ITEMS, WHATSAPP_NUMBER, WHATSAPP_DISPLAY, BENEFITS, LABELS, DRINKS, PEANUTS, SOCIAL, GOOD_MARKET_URL, fmt, fmtPrice } from './data.js'
 
 const CART_KEY = 'tropicai_cart_v2'
@@ -84,7 +84,88 @@ function Header({ count, onCart }) {
   )
 }
 
-function Hero() {
+const HERO_ORDER = [
+  { id: 'kithul-jaggery', label: 'Jaggery', tagline: 'Traditional kithul jaggery, rich with deep caramel notes.' },
+  { id: 'kithul-treacle', label: 'Treacle', tagline: 'Golden, smoky kithul treacle, slow boiled over a wood fire.' },
+  { id: 'bael-flower', label: 'Beli Mal', tagline: 'Calming bael flower tea. Lovely hot, or iced on warm days.' },
+  { id: 'ranawara', label: 'Ranawara', tagline: 'Golden avaram flowers for a traditional village brew.' },
+  { id: 'water-lily-rice', label: 'Olu Haal', tagline: 'Rare water lily rice, gathered from village tanks.' },
+  { id: 'meneri-rice', label: 'Meneri', tagline: 'Dry zone little millet. Light, fluffy and naturally gluten free.' },
+]
+
+function useSlides() {
+  return useMemo(() => {
+    const prod = HERO_ORDER.map(({ id, label, tagline }) => {
+      const p = PRODUCTS.find((x) => x.id === id)
+      const prices = p.variants.map((v) => v.price).filter((x) => x != null)
+      return { key: id, kind: 'product', p, label, title: p.name, si: p.sinhala, kicker: `From ${p.origin}`, tagline, price: prices.length ? `From ${fmt(Math.min(...prices))}` : null, image: p.image, focus: p.focus }
+    })
+    return [
+      ...prod,
+      { key: 'fizzy', kind: 'fizzy', label: 'Sodas', title: 'Ginger bug sodas', kicker: 'The Fizzy Corner', tagline: 'Naturally sparkling with real fruit and fresh ginger. No sugar added, sweetened with bee honey.', image: './media/fizzy/bottle-pineapple.jpg', href: '#fizzy', cta: 'Explore the Fizzy Corner' },
+      { key: 'peanuts', kind: 'peanuts', label: 'Peanuts', title: 'Flavoured peanuts', kicker: 'Snack time', tagline: 'Chocolate, Kithul, Classic Salted and Spicy. Real Thanamalwila peanuts.', price: `${fmt(300)} / 50g`, href: '#peanuts', cta: 'Shop the peanuts' },
+    ]
+  }, [])
+}
+
+function HeroSlider({ onOpen }) {
+  const slides = useSlides()
+  const [i, setI] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const touch = useRef(null)
+  const n = slides.length
+  const go = (k) => setI((x) => (k + n) % n)
+  useEffect(() => {
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (paused || reduce) return
+    const t = setInterval(() => setI((x) => (x + 1) % n), 5000)
+    return () => clearInterval(t)
+  }, [paused, n])
+  return (
+    <div className="slider" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
+      onTouchStart={(e) => { touch.current = e.touches[0].clientX }}
+      onTouchEnd={(e) => { if (touch.current == null) return; const d = e.changedTouches[0].clientX - touch.current; if (Math.abs(d) > 40) go(i + (d < 0 ? 1 : -1)); touch.current = null }}>
+      <div className="slides" aria-roledescription="carousel">
+        {slides.map((s, k) => (
+          <div key={s.key} className={`slide slide-${s.kind}${k === i ? ' on' : ''}`} aria-hidden={k !== i}>
+            {s.kind === 'peanuts' ? (
+              <div className="slide-grid">
+                {['chocolate', 'kithul', 'salted', 'spicy'].map((f) => <img key={f} src={`./media/peanuts/${f}.jpg`} alt="" />)}
+              </div>
+            ) : (
+              <img className="slide-img" src={s.image} alt={s.title} style={{ objectPosition: s.focus || 'center' }} />
+            )}
+            {s.kind === 'fizzy' && <Droplets count={30} seed={11} />}
+            <div className="slide-cap">
+              <p className="slide-kicker">{s.kicker}</p>
+              <h3>{s.title} {s.si && <span className="si">{s.si}</span>}</h3>
+              <p className="slide-line">{s.tagline}</p>
+              <div className="slide-foot">
+                {s.price && <span className="slide-price">{s.price}</span>}
+                {s.kind === 'product'
+                  ? <button className="btn small slide-btn" tabIndex={k === i ? 0 : -1} onClick={() => onOpen(s.p)}>View product</button>
+                  : <a className="btn small slide-btn" tabIndex={k === i ? 0 : -1} href={s.href}>{s.cta} →</a>}
+              </div>
+            </div>
+          </div>
+        ))}
+        <button className="slide-nav prev" onClick={() => go(i - 1)} aria-label="Previous slide">‹</button>
+        <button className="slide-nav next" onClick={() => go(i + 1)} aria-label="Next slide">›</button>
+        <span className="slide-count">{i + 1} / {n}</span>
+      </div>
+      <div className="slide-rail" role="tablist">
+        {slides.map((s, k) => (
+          <button key={s.key} role="tab" aria-selected={k === i} className={k === i ? 'on' : ''} onClick={() => go(k)}>
+            {s.label}
+            {k === i && !paused && <span className="rail-bar" key={i} />}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Hero({ onOpen, onViewCert }) {
   return (
     <section className="hero" id="top">
       <div className="hero-text">
@@ -98,16 +179,25 @@ function Hero() {
           <a href="#shop" className="btn primary">Shop the harvest</a>
           <a href="#process" className="btn ghost">Watch how it's made</a>
         </div>
+        <div className="gm-hero" id="good-market">
+          <img src="./media/good-market-seal.png" alt="Good Market Approved seal" />
+          <div>
+            <strong>Good Market approved</strong>
+            <span>Certified since 25 May 2026 · Good for people, good for the planet</span>
+            <div className="gm-hero-links">
+              <button onClick={onViewCert}>View certificate</button>
+              <a href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">See us on Good Market ↗</a>
+            </div>
+          </div>
+        </div>
         <ul className="trust">
           <li><strong>100%</strong> natural</li>
           <li><strong>2</strong> sourcing regions</li>
-          <li><a href="#good-market" className="trust-link"><strong>Good Market</strong> approved vendor ✓</a></li>
+          <li><strong>Farm</strong> direct</li>
         </ul>
       </div>
       <div className="hero-art">
-        <img className="hero-main" src="./media/beli.jpg" alt="Tropicai Beli Pieces and Bael Flower packs with a cup of beli tea" />
-        <img className="hero-float a" src="./media/kithul-treacle.jpg" alt="Tropicai Kithul Treacle jar" />
-        <img className="hero-float b" src="./media/ranawara.jpg" alt="Tropicai Ranawara pack" />
+        <HeroSlider onOpen={onOpen} />
       </div>
     </section>
   )
@@ -767,14 +857,13 @@ export default function App() {
       <div className="announce">Fresh harvest from Lakshapana and Thanamalwila · <a href="#fizzy">New: Fizzy Corner sodas</a> · Order on WhatsApp {WHATSAPP_DISPLAY}</div>
       <Header count={count} onCart={() => setCartOpen(true)} />
       <main>
-        <Hero />
+        <Hero onOpen={openModal} onViewCert={() => setCertOpen(true)} />
         <PromoBands />
         <Shop cart={cart} add={add} open={openModal} />
         <Peanuts cart={cart} add={add} open={openModal} />
         <FizzyCorner cart={cart} add={add} open={openModal} />
         <Hampers />
         <Story />
-        <GoodMarket onView={() => setCertOpen(true)} />
         <Process />
         <Gallery />
       </main>
