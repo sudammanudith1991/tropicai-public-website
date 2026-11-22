@@ -329,3 +329,31 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
 .fz-body .card-foot { flex-wrap: wrap; row-gap: 8px; }
 .fz-body .price.req { font-size: 13px; white-space: nowrap; }
 .fz-btn, .card-foot .btn { white-space: nowrap; }
+
+/* ===== Popup layout v2: full width benefits ===== */
+.modal-top { display: contents; }
+.modal.wide { display: block; overflow-y: auto; max-width: 1100px; }
+.modal.wide .modal-top { display: grid; grid-template-columns: 1fr 1.1fr; }
+.modal.wide .modal-img { position: static; height: 100%; min-height: 440px; max-height: 560px; }
+.modal.wide .modal-body { overflow: visible; }
+.modal.wide > .x { position: sticky; top: 12px; float: right; margin: 12px 12px -50px 0; }
+.jump { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+.jump a { font-size: 13.5px; font-weight: 700; color: var(--leaf); text-decoration: none; background: #e9eedd; padding: 7px 14px; border-radius: 999px; }
+.jump a:hover { background: #dde5cc; }
+.modal-extra { padding: 8px clamp(18px, 3vw, 36px) 36px; }
+.modal-extra .benefits-wrap { margin-top: 18px; }
+.modal-extra .benefits { grid-template-columns: repeat(3, 1fr); }
+.infographic { margin: 4px 0 22px; box-shadow: 0 18px 40px -24px rgba(43, 29, 19, .55); cursor: zoom-in; }
+.infographic span { font-size: 13px; padding: 7px 14px; }
+.zoom { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 12px 16px; }
+.zoom-scroll { max-width: 100%; max-height: calc(100vh - 110px); overflow: auto; border-radius: 10px; cursor: auto; -webkit-overflow-scrolling: touch; }
+.zoom-scroll img { display: block; max-width: none; width: min(1408px, calc(100vw - 24px)); max-height: none; border-radius: 0; }
+.zoom-hint { color: #cdbcae; font-size: 12.5px; margin: 10px 0 0; text-align: center; }
+.zoom .x { position: fixed; }
+@media (max-width: 900px) {
+  .modal.wide .modal-top { grid-template-columns: 1fr; }
+  .modal.wide .modal-img { min-height: 0; max-height: 300px; height: 300px; }
+  .modal-extra .benefits { grid-template-columns: 1fr 1fr; }
+  .zoom-scroll img { width: 1100px; }
+}
+@media (max-width: 560px) { .modal-extra .benefits { grid-template-columns: 1fr; } }

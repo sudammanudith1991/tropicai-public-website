@@ -371,6 +371,10 @@ function Benefits({ data, onZoom }) {
     <section className="benefits-wrap">
       <p className="eyebrow">Health benefits</p>
       <p className="benefits-sub">{data.subtitle}</p>
+      <button className="infographic" onClick={() => onZoom(data.infographic)} aria-label="Enlarge infographic">
+        <img src={data.infographic} alt="Health benefits infographic" />
+        <span>⤢ Tap to view full size</span>
+      </button>
       <BenefitList items={data.items} />
       {data.uses && (
         <>
@@ -378,10 +382,6 @@ function Benefits({ data, onZoom }) {
           <BenefitList items={data.uses} />
         </>
       )}
-      <button className="infographic" onClick={() => onZoom(data.infographic)} aria-label="Enlarge infographic">
-        <img src={data.infographic} alt="Health benefits infographic" loading="lazy" />
-        <span>Tap to enlarge</span>
-      </button>
       <p className="disclaimer">Based on traditional Sri Lankan use. Not a substitute for medical advice; consult a health professional for personalised guidance.</p>
     </section>
   )
@@ -399,6 +399,7 @@ function Modal({ p, onClose, onAdd, qty }) {
     <div className="overlay" onClick={onClose}>
       <div className={`${ben || label ? 'modal wide' : 'modal'}${p.category === 'fizzy' ? ' fz-modal' : ''}`} onClick={(e) => e.stopPropagation()}>
         <button className="x" onClick={onClose} aria-label="Close">×</button>
+        <div className="modal-top">
         <ProductImage p={p} className="modal-img" />
         <div className="modal-body">
           <p className="eyebrow">{p.origin}</p>
@@ -410,9 +411,19 @@ function Modal({ p, onClose, onAdd, qty }) {
             <span className={v.price == null ? 'price req' : 'price'}>{fmtPrice(v.price)}</span>
             <button className="btn primary" onClick={() => onAdd(p.id, vi)}>{v.price == null ? 'Ask about this' : qty ? `Add another (${qty})` : 'Add to cart'}</button>
           </div>
-          {ben && <Benefits data={ben} onZoom={setZoom} />}
+          {(ben || label) && (
+            <div className="jump">
+              {ben && <a href="#benefits-anchor" onClick={(e) => { e.preventDefault(); document.getElementById('benefits-anchor')?.scrollIntoView({ behavior: 'smooth' }) }}>↓ Health benefits</a>}
+              {label && <a href="#label-anchor" onClick={(e) => { e.preventDefault(); document.getElementById('label-anchor')?.scrollIntoView({ behavior: 'smooth' }) }}>↓ Back label</a>}
+            </div>
+          )}
+        </div>
+        </div>
+        {(ben || label) && (
+        <div className="modal-extra">
+          {ben && <div id="benefits-anchor"><Benefits data={ben} onZoom={setZoom} /></div>}
           {label && (
-            <section className="label-wrap">
+            <section className="label-wrap" id="label-anchor">
               <button className="label-thumb" onClick={() => setZoom(label)} aria-label="Enlarge back label">
                 <img src={label} alt={`${p.name} back label`} loading="lazy" />
               </button>
@@ -425,11 +436,15 @@ function Modal({ p, onClose, onAdd, qty }) {
             </section>
           )}
         </div>
+        )}
       </div>
       {zoom && (
         <div className="zoom" onClick={(e) => { e.stopPropagation(); setZoom(null) }}>
-          <img src={zoom} alt="Health benefits infographic" />
-          <button className="x" aria-label="Close">×</button>
+          <div className="zoom-scroll" onClick={(e) => e.stopPropagation()}>
+            <img src={zoom} alt="Enlarged view" />
+          </div>
+          <p className="zoom-hint">Scroll or pinch to explore · tap outside or × to close</p>
+          <button className="x" aria-label="Close" onClick={(e) => { e.stopPropagation(); setZoom(null) }}>×</button>
         </div>
       )}
     </div>
