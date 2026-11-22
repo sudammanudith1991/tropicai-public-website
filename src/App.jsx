@@ -181,6 +181,18 @@ function Banner() {
 function Intro({ onViewCert }) {
   return (
     <section className="intro">
+      <div className="intro-left">
+          <div className="gm-hero" id="good-market">
+          <img src="./media/good-market-seal.png" alt="Good Market Approved seal" />
+          <div>
+            <strong>Good Market approved</strong>
+            <span>Certified since 25 May 2026 · Good for people, good for the planet</span>
+            <div className="gm-hero-links">
+              <button onClick={onViewCert}>View certificate</button>
+              <a href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">See us on Good Market ↗</a>
+            </div>
+          </div>
+        </div>
       <div className="intro-map">
         <video src="./media/sourcing-map.mp4" poster="./media/sourcing-map.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="Map of Sri Lanka showing where Tropicai sources its products" />
         <div className="map-legend">
@@ -188,8 +200,8 @@ function Intro({ onViewCert }) {
           <span><b>📍 Thanamalwila</b> Grains, herbal flowers and peanuts</span>
         </div>
       </div>
+      </div>
       <div className="intro-text">
-        <p className="eyebrow">Farm direct from Sri Lanka</p>
         <h1>Nature's purest, <em>delivered to your doorstep.</em></h1>
         <p className="lead">Kithul from Lakshapana. Grains, herbal flowers and peanuts from Thanamalwila. Made by hand, packed with care.</p>
         <div className="hero-cta">
@@ -201,17 +213,6 @@ function Intro({ onViewCert }) {
           <li><strong>2</strong> sourcing regions</li>
           <li><strong>Farm</strong> direct</li>
         </ul>
-        <div className="gm-hero" id="good-market">
-          <img src="./media/good-market-seal.png" alt="Good Market Approved seal" />
-          <div>
-            <strong>Good Market approved</strong>
-            <span>Certified since 25 May 2026 · Good for people, good for the planet</span>
-            <div className="gm-hero-links">
-              <button onClick={onViewCert}>View certificate</button>
-              <a href={GOOD_MARKET_URL} target="_blank" rel="noopener noreferrer">See us on Good Market ↗</a>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   )

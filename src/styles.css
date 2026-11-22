@@ -618,3 +618,12 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
 .peanuts .section-head p:last-child, .peanuts .pn-note { color: #f3dcc0; }
 .peanuts .pn-card { border-color: transparent; box-shadow: 0 24px 44px -26px rgba(0,0,0,.7); }
 .peanuts .pn-card .btn.primary { background: #7a4519; }
+
+/* intro alignment v4 */
+.intro { grid-template-columns: 1.05fr 1fr; align-items: stretch; }
+.intro-left { display: flex; flex-direction: column; gap: 18px; }
+.intro-left .gm-hero { margin: 0; max-width: none; }
+.intro-text { display: flex; flex-direction: column; justify-content: center; }
+.intro-text h1 { margin-top: 0; }
+.intro-text .trust { margin-bottom: 0; }
+@media (max-width: 900px) { .intro-text { order: -1; } }
