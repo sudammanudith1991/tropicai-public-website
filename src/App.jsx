@@ -485,34 +485,62 @@ function GoodMarket({ onView }) {
 
 function Story() {
   return (
-    <section className="story" id="story">
-      <div className="story-img">
-        <img src="./media/water-lily-rice-2.jpg" alt="Tropicai Water Lily Rice pack with a lotus bud" />
-      </div>
-      <div className="story-text">
+    <section className="story2" id="story">
+      <div className="st-head">
         <p className="eyebrow">Our story</p>
-        <h2>Two regions. One promise.</h2>
-        <p>
-          Tropicai is a small family brand that works directly with the farmers and tappers who grow our food.
-          No middlemen, no blending, no preservatives. Just honest produce from the places it grows best.
-        </p>
-        <div className="regions">
-          <div>
-            <h4>Lakshapana</h4>
-            <p>Misty hill forests where tappers climb kithul palms at dawn to collect sap, then boil it down over wood fire into treacle, jaggery and flour.</p>
-          </div>
-          <div>
-            <h4>Thanamalwila</h4>
-            <p>Sunny dry zone farmland and village tanks, home to our peanuts, millets, water lily rice, legumes and herbal flowers.</p>
-          </div>
-        </div>
-        <ul className="values">
-          <li>Farm direct sourcing</li>
-          <li>Grains cleaned and protected without chemical preservatives</li>
-          <li>Kraft packs, filled in small batches</li>
-          <li>Find us at Good Market and selected cafés</li>
-        </ul>
+        <h2>Food tastes better when you know <em>who made it.</em></h2>
       </div>
+
+      <div className="st-why">
+        <div className="st-photos">
+          <figure className="st-founders">
+            <img src="./media/founders.jpg" alt="Tropicai founders at their market stall" />
+            <figcaption>The founders, at the stall</figcaption>
+          </figure>
+          <figure className="st-stall">
+            <img src="./media/stall.jpg" alt="Tropicai stall at the Saturday Good Market" />
+            <figcaption>Every Saturday at Good Market</figcaption>
+          </figure>
+        </div>
+        <div className="st-text">
+          <h3>Why we started</h3>
+          <p>
+            We grew up with access to food most people never get to taste: kithul jaggery made by family, treacle from
+            farmers we know by name, grains from our own land. Quality, untouched food, straight from the people who make it.
+          </p>
+          <p>
+            Tropicai is how we share that with you. When you are closer to the person who creates the food, it always tastes
+            better. So we keep the journey from farm to your kitchen as short as possible, add no preservatives, and let it
+            taste the way nature made it.
+          </p>
+          <blockquote>"When you are closer to the one who is creating the food, the food always tastes better."</blockquote>
+          <p className="st-sign">From our family to yours.</p>
+        </div>
+      </div>
+
+      <div className="regions st-regions">
+        <div>
+          <h4>📍 Lakshapana</h4>
+          <p>
+            Our aunt lives here and makes our kithul jaggery by hand. The treacle comes from farmers we know, collected from
+            their homes. Misty hill forests where tappers climb kithul palms at dawn and boil the sap down over a wood fire.
+          </p>
+        </div>
+        <div>
+          <h4>📍 Thanamalwila</h4>
+          <p>
+            We have our own land here, and our grains come from farmers we know personally. Sunny dry zone farmland and village
+            tanks, home to our peanuts, millets, water lily rice, legumes and herbal flowers.
+          </p>
+        </div>
+      </div>
+
+      <ul className="values st-values">
+        <li>Family and known farmers, no middlemen</li>
+        <li>No preservatives, kept as fresh as possible</li>
+        <li>Packed by hand in small batches</li>
+        <li>Find us every Saturday at Good Market, and at other markets and selected cafés</li>
+      </ul>
     </section>
   )
 }
