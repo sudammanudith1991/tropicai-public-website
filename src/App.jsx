@@ -8,7 +8,7 @@ const qtyOf = (cart, id) => Object.entries(cart).reduce((s, [k, q]) => (parseKey
 
 function ProductImage({ p, className }) {
   if (!p.image) return <div className={`img-ph ${className || ''}`}><Logo size={72} /><span>{p.name}</span></div>
-  return <img className={className} src={p.image} alt={`Tropicai ${p.name}`} style={{ objectPosition: p.focus || 'center' }} loading="lazy" />
+  return <img className={className} src={p.image} alt={`Tropicai ${p.name}${p.sinhala ? ` (${p.sinhala})` : ''} from ${p.origin}, Sri Lanka`} style={{ objectPosition: p.focus || 'center' }} loading="lazy" />
 }
 
 function SizePicker({ p, vi, setVi }) {
@@ -628,10 +628,6 @@ function Benefits({ data, onZoom }) {
     <section className="benefits-wrap">
       <p className="eyebrow">Health benefits</p>
       <p className="benefits-sub">{data.subtitle}</p>
-      <button className="infographic" onClick={() => onZoom(data.infographic)} aria-label="Enlarge infographic">
-        <img src={data.infographic} alt="Health benefits infographic" />
-        <span>⤢ Tap to view full size</span>
-      </button>
       <BenefitList items={data.items} />
       {data.uses && (
         <>
@@ -830,7 +826,9 @@ function CartDrawer({ open, onClose, cart, setQty, clear }) {
 }
 
 export default function App() {
-  const [cart, setCart] = useState(loadCart)
+  const [cart, setCart] = useState({})
+  const loaded = useRef(false)
+  useEffect(() => { setCart(loadCart()); loaded.current = true }, [])
   const [cartOpen, setCartOpen] = useState(false)
   const [modal, setModal] = useState(null)
   const [section, setSection] = useState(null)
@@ -838,7 +836,7 @@ export default function App() {
   const openModal = (p, sec = null) => { setSection(sec); setModal(p) }
   const [toast, setToast] = useState('')
 
-  useEffect(() => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)) } catch { /* ignore */ } }, [cart])
+  useEffect(() => { if (!loaded.current) return; try { localStorage.setItem(CART_KEY, JSON.stringify(cart)) } catch { /* ignore */ } }, [cart])
   useEffect(() => {
     document.body.style.overflow = cartOpen || modal || certOpen ? 'hidden' : ''
   }, [cartOpen, modal, certOpen])
