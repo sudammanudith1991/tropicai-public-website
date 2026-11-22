@@ -84,70 +84,86 @@ function Header({ count, onCart }) {
   )
 }
 
-const HERO_ORDER = [
-  { id: 'kithul-jaggery', label: 'Jaggery', tagline: 'Traditional kithul jaggery, rich with deep caramel notes.' },
-  { id: 'kithul-treacle', label: 'Treacle', tagline: 'Golden, smoky kithul treacle, slow boiled over a wood fire.' },
-  { id: 'bael-flower', label: 'Beli Mal', tagline: 'Calming bael flower tea. Lovely hot, or iced on warm days.' },
-  { id: 'ranawara', label: 'Ranawara', tagline: 'Golden avaram flowers for a traditional village brew.' },
-  { id: 'water-lily-rice', label: 'Olu Haal', tagline: 'Rare water lily rice, gathered from village tanks.' },
-  { id: 'meneri-rice', label: 'Meneri', tagline: 'Dry zone little millet. Light, fluffy and naturally gluten free.' },
-]
+const HERO_ORDER = ['kithul-jaggery', 'kithul-treacle', 'bael-flower', 'ranawara', 'water-lily-rice', 'meneri-rice']
 
 function useSlides() {
   return useMemo(() => {
-    const prod = HERO_ORDER.map(({ id, label, tagline }) => {
-      const p = PRODUCTS.find((x) => x.id === id)
-      const prices = p.variants.map((v) => v.price).filter((x) => x != null)
-      return { key: id, kind: 'product', p, label, title: p.name, si: p.sinhala, kicker: `From ${p.origin}`, tagline, price: prices.length ? `From ${fmt(Math.min(...prices))}` : null, image: p.image, focus: p.focus }
-    })
+    const hero = HERO_ORDER.map((id) => PRODUCTS.find((x) => x.id === id))
     return [
-      ...prod,
-      { key: 'fizzy', kind: 'fizzy', label: 'Sodas', title: 'Ginger bug sodas', kicker: 'The Fizzy Corner', tagline: 'Naturally sparkling with real fruit and fresh ginger. No sugar added, sweetened with bee honey.', image: './media/fizzy/bottle-pineapple.jpg', href: '#fizzy', cta: 'Explore the Fizzy Corner' },
-      { key: 'peanuts', kind: 'peanuts', label: 'Peanuts', title: 'Flavoured peanuts', kicker: 'Snack time', tagline: 'Chocolate, Kithul, Classic Salted and Spicy. Real Thanamalwila peanuts.', price: `${fmt(300)} / 50g`, href: '#peanuts', cta: 'Shop the peanuts' },
+      {
+        key: 'raw', kind: 'raw', label: 'Raw products', href: '#shop', cta: 'Shop the harvest',
+        kicker: 'Raw product range', title: 'Pure, natural harvest',
+        tagline: 'Kithul jaggery and treacle, beli mal, ranawara, olu haal and meneri, straight from Lakshapana and Thanamalwila.',
+        tiles: hero.map((p) => ({ src: p.image, focus: p.focus, name: p.name.replace(' Rice', '').replace('Water Lily', 'Olu Haal') })),
+      },
+      {
+        key: 'fizzy', kind: 'fizzy', label: 'Fizzy drinks', href: '#fizzy', cta: 'Explore the Fizzy Corner',
+        kicker: 'The Fizzy Corner', title: 'Ginger bug sodas',
+        tagline: 'Pineapple, mango, pomegranate, sweet orange and watermelon. Naturally sparkling, no sugar added, sweetened with bee honey.',
+        image: './media/fizzy/bottle-pineapple.jpg',
+      },
+      {
+        key: 'peanuts', kind: 'peanuts', label: 'Peanuts', href: '#peanuts', cta: 'Shop the peanuts',
+        kicker: 'Snack time', title: 'Flavoured peanuts', price: `${fmt(300)} / 50g`,
+        tagline: 'Chocolate, Kithul, Classic Salted and Spicy. Real Thanamalwila peanuts, roasted and tossed in flavour.',
+        tiles: ['chocolate', 'kithul', 'salted', 'spicy'].map((f) => ({ src: `./media/peanuts/${f}.jpg` })),
+      },
+      {
+        key: 'hampers', kind: 'hampers', label: 'Gift hampers', href: '#hampers', cta: 'See what is coming',
+        kicker: 'Gifting · Coming soon', title: 'Create your own hamper',
+        tagline: 'Pick your favourites from our pantry, peanuts and sodas, made into a Tropicai gift.',
+        tiles: ['./media/kithul-treacle.jpg', './media/water-lily-rice.jpg', './media/peanuts/kithul.jpg', './media/ranawara.jpg'].map((src) => ({ src })),
+      },
     ]
   }, [])
 }
 
-function HeroSlider({ onOpen }) {
+function HeroSlider() {
   const slides = useSlides()
   const [i, setI] = useState(0)
   const [paused, setPaused] = useState(false)
   const touch = useRef(null)
+  const swiped = useRef(false)
   const n = slides.length
-  const go = (k) => setI((x) => (k + n) % n)
+  const go = (k) => setI((k + n) % n)
   useEffect(() => {
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (paused || reduce) return
-    const t = setInterval(() => setI((x) => (x + 1) % n), 5000)
+    const t = setInterval(() => setI((x) => (x + 1) % n), 5500)
     return () => clearInterval(t)
   }, [paused, n])
   return (
     <div className="slider" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => { touch.current = e.touches[0].clientX }}
-      onTouchEnd={(e) => { if (touch.current == null) return; const d = e.changedTouches[0].clientX - touch.current; if (Math.abs(d) > 40) go(i + (d < 0 ? 1 : -1)); touch.current = null }}>
+      onTouchStart={(e) => { touch.current = e.touches[0].clientX; swiped.current = false }}
+      onTouchEnd={(e) => { if (touch.current == null) return; const d = e.changedTouches[0].clientX - touch.current; if (Math.abs(d) > 40) { swiped.current = true; go(i + (d < 0 ? 1 : -1)) } touch.current = null }}>
       <div className="slides" aria-roledescription="carousel">
         {slides.map((s, k) => (
-          <div key={s.key} className={`slide slide-${s.kind}${k === i ? ' on' : ''}`} aria-hidden={k !== i}>
-            {s.kind === 'peanuts' ? (
-              <div className="slide-grid">
-                {['chocolate', 'kithul', 'salted', 'spicy'].map((f) => <img key={f} src={`./media/peanuts/${f}.jpg`} alt="" />)}
+          <a key={s.key} href={s.href} className={`slide slide-${s.kind}${k === i ? ' on' : ''}`} aria-hidden={k !== i} tabIndex={k === i ? 0 : -1}
+            onClick={(e) => { if (swiped.current) { e.preventDefault(); swiped.current = false } }}>
+            {s.tiles ? (
+              <div className={`slide-grid g${s.tiles.length}`}>
+                {s.tiles.map((t, j) => (
+                  <div key={j} className="tile">
+                    <img src={t.src} alt="" style={{ objectPosition: t.focus || 'center' }} />
+                    {t.name && <span>{t.name}</span>}
+                  </div>
+                ))}
               </div>
             ) : (
-              <img className="slide-img" src={s.image} alt={s.title} style={{ objectPosition: s.focus || 'center' }} />
+              <img className="slide-img" src={s.image} alt={s.title} />
             )}
             {s.kind === 'fizzy' && <Droplets count={30} seed={11} />}
+            {s.kind === 'hampers' && <span className="slide-ribbon">Coming soon</span>}
             <div className="slide-cap">
               <p className="slide-kicker">{s.kicker}</p>
-              <h3>{s.title} {s.si && <span className="si">{s.si}</span>}</h3>
+              <h3>{s.title}</h3>
               <p className="slide-line">{s.tagline}</p>
               <div className="slide-foot">
                 {s.price && <span className="slide-price">{s.price}</span>}
-                {s.kind === 'product'
-                  ? <button className="btn small slide-btn" tabIndex={k === i ? 0 : -1} onClick={() => onOpen(s.p)}>View product</button>
-                  : <a className="btn small slide-btn" tabIndex={k === i ? 0 : -1} href={s.href}>{s.cta} →</a>}
+                <span className="btn small slide-btn">{s.cta} →</span>
               </div>
             </div>
-          </div>
+          </a>
         ))}
         <button className="slide-nav prev" onClick={() => go(i - 1)} aria-label="Previous slide">‹</button>
         <button className="slide-nav next" onClick={() => go(i + 1)} aria-label="Next slide">›</button>
@@ -197,7 +213,7 @@ function Hero({ onOpen, onViewCert }) {
         </ul>
       </div>
       <div className="hero-art">
-        <HeroSlider onOpen={onOpen} />
+        <HeroSlider />
       </div>
     </section>
   )

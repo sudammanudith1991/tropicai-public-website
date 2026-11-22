@@ -507,3 +507,15 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.1; 
 .gm-hero-links button, .gm-hero-links a { background: none; border: 0; padding: 0; font-size: 13.5px; font-weight: 700; color: #1f4d22; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .hero .trust { margin-top: 26px; }
 @media (max-width: 900px) { .hero-art { max-width: 560px; } }
+
+/* Range slides */
+.slide { display: block; text-decoration: none; color: inherit; }
+.slide-grid.g6 { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; }
+.tile { position: relative; overflow: hidden; }
+.tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 6s ease; }
+.slide.on .tile img { transform: scale(1.06); }
+.tile span { position: absolute; left: 8px; top: 8px; background: rgba(247, 241, 230, .92); color: var(--brown); font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; }
+.slide-hampers .tile img { filter: saturate(.85) brightness(.92); }
+.slide-ribbon { position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%) rotate(-8deg); background: var(--gold); color: #fff; font-family: var(--serif); font-weight: 700; font-size: 30px; padding: 10px 30px; border-radius: 10px; box-shadow: 0 14px 30px -12px rgba(0,0,0,.6); white-space: nowrap; }
+.slide:hover .slide-btn { background: #fff; }
+.slide-rail button { padding: 7px 14px; font-size: 13px; }
