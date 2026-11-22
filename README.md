@@ -17,7 +17,16 @@ npm run dev
 npm run build
 ```
 
-Upload the `dist` folder to any static host (Netlify, Vercel, GitHub Pages, Cloudflare Pages).
+Upload the `dist` folder to any static host.
+
+## Deploy on Netlify
+
+The repo includes `netlify.toml`, so Netlify detects everything automatically:
+
+1. Netlify → **Add new site** → **Import an existing project** → GitHub → pick this repo.
+2. Build command `npm run build`, publish directory `dist` (prefilled from `netlify.toml`).
+3. Every push to `main` deploys automatically.
+4. Custom domain: **Site configuration → Domain management → Add a domain**, then add the DNS records Netlify shows at your registrar.
 
 ## Editing products and prices
 
